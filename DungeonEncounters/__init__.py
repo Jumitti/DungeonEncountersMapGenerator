@@ -97,7 +97,7 @@ def generate_random_routes(grid, grid_size=100, x=50, y=50, route_width=3,
     return grid
 
 
-def generate_voronoi_map(grid, start_x, start_y, grid_size=100, num_sites=200,
+def generate_voronoi_map(grid, start_x, start_y, grid_size=100, num_sites=50,
                          CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
                                     case["name"] == "CASE"), None),
                          EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
@@ -239,13 +239,13 @@ def remove_random_paths(grid, percentage_to_remove,
                 grid[rx][ry] = CASE
 
 
-def complete_path_with_hidden(grid, x, y, case_type="RANDOM",
-                              CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
-                                         if case["name"] == "CASE"), None),
-                              EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                          case["name"] == "EMPTY"), None),
-                              HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                           case["name"] == "HIDDEN"), None), grid_size=100):
+def complete_path(grid, x, y, case_type="RANDOM",
+                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
+                             if case["name"] == "CASE"), None),
+                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                              case["name"] == "EMPTY"), None),
+                  HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                               case["name"] == "HIDDEN"), None), grid_size=100):
     visited = set()
     queue = deque([(x, y, [])])
     visited.add((x, y))
@@ -301,7 +301,7 @@ def refine_map(grid, grid_size=100,
                         grid[x + 1][y - 1] == EMPTY and grid[x + 1][y + 1] == EMPTY):
 
                     grid[x][y] = EMPTY
-                    complete_path_with_hidden(grid, x, y, "RANDOM")
+                    complete_path(grid, x, y, "RANDOM")
                     grid[x][y] = value_case
 
                 elif (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and

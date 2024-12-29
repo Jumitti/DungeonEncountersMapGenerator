@@ -1,2 +1,5 @@
 pillow~=11.0.0
 pandas~=2.2.3
+scipy
+matplotlib
+numpy~=2.2.1

@@ -51,6 +51,7 @@ if case_83 is None:
 if EMPTY is None or CASE is None or START_FLOOR_0 is None or DESCENDING is None or ASCENDING is None:
     raise ValueError("Les valeurs nécessaires ne sont pas présentes dans le fichier JSON.")
 
+
 # Fonction pour générer l'image du labyrinthe
 def generate_floor_image(output_image_path, i, ascending_coords=None):
     grid = [[EMPTY for _ in range(grid_size)] for _ in range(grid_size)]
@@ -64,10 +65,15 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
 
     grid[start_x][start_y] = CASE  # Marquer le point de départ comme un chemin
 
-    DE.generate_maze(grid, start_x, start_y,
-                  max_depth=20)  # Générer le labyrinthe avec une profondeur plus élevée pour mieux connecter
+    DE.generate_voronoi_map(grid, start_x, start_y)  # Générer le labyrinthe avec une profondeur plus élevée pour mieux connecter
 
-    DE.remove_random_paths(grid, 0.5)  # Suppression de 50% des chemins
+    DE.remove_random_paths(grid, 0.50)  # Suppression de 50% des chemins
+
+    # Vérification de la connectivité des CASE
+    if DE.is_connected(grid, start_x, start_y):
+        print("Le labyrinthe est connecté.")
+    else:
+        print("Le labyrinthe n'est pas connecté.")
 
     if i == 0:
         grid[50][50] = START_FLOOR_0
@@ -98,7 +104,7 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
             if i == coord[0]:
                 DE.complete_path_with_hidden(grid, wx, wy, "HIDDEN")  # Compléter avec HIDDEN autour du Wanderer
                 grid[wx][wy] = CASE  # Place un CASE (ou une autre valeur spécifique) pour le Wanderer
-                print(f"Wanderer '{wanderer_data["name"]}' placé à ({wy}, {wx})")
+                print(f"Wanderer {wanderer_data['name']} placé à ({wy}, {wx})")
 
     for map_name, map_date in special_cases.items():
         # Vérification si 'other_name' existe et est bien une chaîne
@@ -138,14 +144,37 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
     for x in range(1, grid_size - 1):  # On commence à 1 et on s'arrête à grid_size - 1 pour ne pas sortir des limites
         for y in range(1, grid_size - 1):
             if grid[x][y] != EMPTY:  # Vérifier les cases non-EMPTY
-                # Vérifier les voisins (haut, bas, gauche, droite)
+                # Cas 1: Vérifier si la case est entourée de cases vides (horizontale, verticale, et diagonales)
                 if (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
-                        grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY):
+                        grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY and
+                        grid[x - 1][y - 1] == EMPTY and grid[x - 1][y + 1] == EMPTY and
+                        grid[x + 1][y - 1] == EMPTY and grid[x + 1][y + 1] == EMPTY):
+
                     value_case = grid[x][y]
                     grid[x][y] = EMPTY
                     DE.complete_path_with_hidden(grid, x, y, "RANDOM")  # Compléter avec HIDDEN autour de la case
                     grid[x][y] = value_case
-                    print(f"Case isolée à ({i}, {x}, {y}) entourée de cases vides, remplie avec CASE.")
+                    print(
+                        f"Case isolée à ({x}, {y}) entourée de cases vides (y compris les diagonales), remplie avec CASE.")
+
+                # Cas 2: Vérifier si la case est entourée horizontalement et verticalement par des cases vides,
+                # mais au moins une diagonale est non vide, ajouter une CASE entre la diagonale et la case
+                elif (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
+                      grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY):
+
+                    # Vérifier les diagonales valides
+                    if grid[x - 1][y - 1] != EMPTY:  # Diagonale haut-gauche
+                        grid[x - 1][y] = CASE  # Ajouter une CASE entre haut-gauche et case
+                        print(f"Ajout d'une CASE entre la diagonale haut-gauche et la case ({x}, {y})")
+                    elif grid[x - 1][y + 1] != EMPTY:  # Diagonale haut-droite
+                        grid[x - 1][y] = CASE  # Ajouter une CASE entre haut-droite et case
+                        print(f"Ajout d'une CASE entre la diagonale haut-droite et la case ({x}, {y})")
+                    elif grid[x + 1][y - 1] != EMPTY:  # Diagonale bas-gauche
+                        grid[x + 1][y] = CASE  # Ajouter une CASE entre bas-gauche et case
+                        print(f"Ajout d'une CASE entre la diagonale bas-gauche et la case ({x}, {y})")
+                    elif grid[x + 1][y + 1] != EMPTY:  # Diagonale bas-droite
+                        grid[x + 1][y] = CASE  # Ajouter une CASE entre bas-droite et case
+                        print(f"Ajout d'une CASE entre la diagonale bas-droite et la case ({x}, {y})")
 
     # Créer l'image en utilisant les couleurs définies dans le JSON
     image = Image.new("RGB", (grid_size, grid_size), value_to_color[EMPTY])
@@ -182,4 +211,4 @@ def run(nb_maps, generate_bin=False):
 
 
 if __name__ == "__main__":
-    run(9, generate_bin=False)
+    run(4, generate_bin=False)

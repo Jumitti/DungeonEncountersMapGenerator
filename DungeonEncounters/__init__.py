@@ -1,6 +1,9 @@
 import json
 import random
+import numpy as np
 from collections import deque
+from random import shuffle, choice
+from scipy.spatial import Voronoi, voronoi_plot_2d
 
 from PIL import Image
 
@@ -77,45 +80,94 @@ def generate_maze(grid, x, y, max_depth=50, CASE=next(
             generate_maze(grid, nx, ny, max_depth - 1)
 
 
-# # Fonction pour effectuer une recherche en profondeur pour vérifier la connectivité
-# def dfs(grid, x, y, visited,
-#         CASE=next(
-#             (int(key, 16) for key, case in json.load(open("special_case.json")).items() if case["name"] == "CASE"),
-#             None), grid_size=100):
-#     stack = [(x, y)]
-#     while stack:
-#         cx, cy = stack.pop()
-#         if (cx, cy) not in visited:
-#             visited.add((cx, cy))
-#             directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-#             for dx, dy in directions:
-#                 nx, ny = cx + dx, cy + dy
-#                 if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
-#                     stack.append((nx, ny))
-#
-#
-# def remove_random_paths(grid, percentage_to_remove,
-#                         CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-#                                    case["name"] == "CASE"), None),
-#                         EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-#                                     case["name"] == "EMPTY"), None), grid_size=100):
-#     # On va sélectionner les chemins et essayer de les supprimer tout en maintenant la connectivité
-#     paths = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == CASE]
-#     random.shuffle(paths)
-#
-#     num_to_remove = int(len(paths) * percentage_to_remove)
-#
-#     for i in range(num_to_remove):
-#         x, y = paths[i]
-#         grid[x][y] = EMPTY  # Supprimer ce chemin temporairement
-#
-#         # Vérifier la connectivité
-#         visited = set()
-#         dfs(grid, 50, 50, visited)
-#
-#         # Si après la suppression il reste des chemins déconnectés, remettre cette case en CASE
-#         if len(visited) != sum(1 for px, py in paths if grid[px][py] == CASE):
-#             grid[x][y] = CASE
+def generate_random_routes(grid, grid_size=100, x=50, y=50, route_width=3,
+                           CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                      case["name"] == "CASE"), None),
+                           EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                       case["name"] == "EMPTY"), None)):
+    # Liste des positions à explorer
+    def neighbors(x, y):
+        return [(x + dx, y + dy) for dx, dy in
+                [(0, route_width), (route_width, 0), (0, -route_width), (-route_width, 0)]
+                if 0 <= x + dx < grid_size and 0 <= y + dy < grid_size]
+
+    grid[x][y] = CASE
+    frontier = neighbors(x, y)
+    shuffle(frontier)
+
+    while frontier:
+        nx, ny = frontier.pop()
+        if grid[nx][ny] == EMPTY:
+            # Marquer les cases comme route
+            for i in range(route_width):
+                if 0 <= nx - i < grid_size:
+                    grid[nx - i][ny] = CASE
+                if 0 <= ny - i < grid_size:
+                    grid[nx][ny - i] = CASE
+
+            # Ajouter les voisins
+            for neighbor in neighbors(nx, ny):
+                if grid[neighbor[0]][neighbor[1]] == EMPTY:
+                    frontier.append(neighbor)
+            shuffle(frontier)
+
+    return grid
+
+
+def generate_voronoi_map(grid, start_x, start_y, grid_size=20, num_sites=20,
+                         CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                    case["name"] == "CASE"), None),
+                         EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                     case["name"] == "EMPTY"), None)
+                         ):
+
+    # Positionner les sites, en plaçant le premier site au centre spécifié
+    sites = np.array([[start_x, start_y]] + [[random.randint(start_x - grid_size, start_x + grid_size),
+                                     random.randint(start_y - grid_size, start_y + grid_size)] for _ in
+                                    range(num_sites - 1)])
+
+    vor = Voronoi(sites)
+
+    # Tracer les arêtes sur la grille
+    for ridge in vor.ridge_vertices:
+        if -1 in ridge:  # Ignorer les arêtes infinies
+            continue
+        start, end = vor.vertices[ridge]
+        start = np.round(start).astype(int)
+        end = np.round(end).astype(int)
+
+        # Vérifier si les points sont dans les limites de la grille
+        if 0 <= start[0] < start_x + grid_size and 0 <= start[1] < start_y + grid_size and \
+                0 <= end[0] < start_x + grid_size and 0 <= end[1] < start_y + grid_size:
+            # Tracer une ligne entre start et end
+            for x, y in bresenham_line(start[0], start[1], end[0], end[1]):
+                if 0 <= x < start_x + grid_size and 0 <= y < start_y + grid_size:
+                    grid[x][y] = CASE
+
+    return grid
+
+def bresenham_line(x1, y1, x2, y2):
+    points = []
+    dx = abs(x2 - x1)
+    dy = abs(y2 - y1)
+    sx = 1 if x1 < x2 else -1
+    sy = 1 if y1 < y2 else -1
+    err = dx - dy
+
+    while True:
+        points.append((x1, y1))
+        if x1 == x2 and y1 == y2:
+            break
+        e2 = 2 * err
+        if e2 > -dy:
+            err -= dy
+            x1 += sx
+        if e2 < dx:
+            err += dx
+            y1 += sy
+
+    return points
+
 
 # Fonction pour effectuer une recherche en profondeur pour vérifier la connectivité
 def dfs(grid, x, y, visited,
@@ -133,6 +185,38 @@ def dfs(grid, x, y, visited,
                 if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
                     stack.append((nx, ny))
 
+
+def is_connected(grid, start_x, start_y, CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                   case["name"] == "CASE"), None),
+                        EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                    case["name"] == "EMPTY"), None),
+                 grid_size=100):
+    # Vérifier si la grille est connectée en utilisant DFS (Depth-First Search)
+    visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]  # Matrice de visites
+    stack = [(start_x, start_y)]  # Pile pour DFS
+
+    # Directions possibles (haut, bas, gauche, droite)
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    visited[start_x][start_y] = True  # Marquer le point de départ comme visité
+    visited_count = 1  # Compter le nombre de CASE visitées
+
+    # Parcours DFS
+    while stack:
+        x, y = stack.pop()
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+
+            # Vérifier les limites de la grille et si la case est un chemin (CASE)
+            if 0 <= nx < grid_size and 0 <= ny < grid_size and not visited[nx][ny] and grid[nx][ny] == CASE:
+                visited[nx][ny] = True
+                stack.append((nx, ny))
+                visited_count += 1
+
+    # Vérifier si toutes les cases marquées CASE ont été visitées
+    total_case_count = sum(row.count(CASE) for row in grid)
+    return visited_count == total_case_count
 
 def remove_random_paths(grid, percentage_to_remove,
                         CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
@@ -183,7 +267,7 @@ def complete_path_with_hidden(grid, x, y, case_type="RANDOM",
                               EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
                                           case["name"] == "EMPTY"), None),
                               HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                          case["name"] == "HIDDEN"), None), grid_size=100):
+                                           case["name"] == "HIDDEN"), None), grid_size=100):
     # Effectuer un BFS ou DFS pour trouver le chemin en diagonale vers la case CASE et le remplir avec HIDDEN
     visited = set()
     queue = deque([(x, y, [])])  # On garde la trajectoire parcourue
@@ -211,11 +295,10 @@ def complete_path_with_hidden(grid, x, y, case_type="RANDOM",
             return path
 
         # Ajouter les cases adjacentes (y compris diagonales)
-        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:  # diagonales
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0),
+                       (1, -1), (-1, 1), (1, 1), (-1, -1)]:  # diagonales
             nx, ny = cx + dx, cy + dy
-            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, CASE] and (nx, ny) not in visited:
+            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, CASE] and (
+                    nx, ny) not in visited:
                 visited.add((nx, ny))
                 queue.append((nx, ny, path + [(nx, ny)]))
-
-
-

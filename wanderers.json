@@ -1,0 +1,350 @@
+{
+    "Perso 1": {
+        "name": "Sesspare",
+        "other_name": [
+            "Sesspare"
+        ],
+        "coord": [
+            [
+                0,
+                36,
+                32
+            ]
+        ],
+        "color": [
+            226,
+            113,
+            106
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 2": {
+        "name": "Shunga",
+        "other_name": [
+            "Shunga"
+        ],
+        "coord": [
+            [
+                0,
+                46,
+                55
+            ]
+        ],
+        "color": [
+            190,
+            134,
+            249
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 3": {
+        "name": "Rodovich",
+        "other_name": [
+            "Rodovich"
+        ],
+        "coord": [
+            [
+                2,
+                92,
+                93
+            ]
+        ],
+        "color": [
+            173,
+            69,
+            21
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 4": {
+        "name": "Gracia",
+        "other_name": [
+            "Gracia"
+        ],
+        "coord": [
+            [
+                8,
+                59,
+                39
+            ]
+        ],
+        "color": [
+            181,
+            106,
+            159
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 5": {
+        "name": "McAllie",
+        "other_name": [
+            "McAllie"
+        ],
+        "coord": [
+            [
+                12,
+                53,
+                16
+            ]
+        ],
+        "color": [
+            93,
+            63,
+            156
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 6": {
+        "name": "Ilbertha",
+        "other_name": [
+            "Ilbertha"
+        ],
+        "coord": [
+            [
+                16,
+                29,
+                33
+            ]
+        ],
+        "color": [
+            171,
+            69,
+            4
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 7": {
+        "name": "Nalpurna",
+        "other_name": [
+            "Nalpurna"
+        ],
+        "coord": [
+            [
+                22,
+                21,
+                53
+            ]
+        ],
+        "color": [
+            49,
+            202,
+            230
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 8": {
+        "name": "Jufren",
+        "other_name": [
+            "Jufren"
+        ],
+        "coord": [
+            [
+                27,
+                91,
+                33
+            ]
+        ],
+        "color": [
+            196,
+            18,
+            32
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 9": {
+        "name": "Houk Gau",
+        "other_name": [
+            "Houk Gau"
+        ],
+        "coord": [
+            [
+                34,
+                35,
+                84
+            ]
+        ],
+        "color": [
+            199,
+            136,
+            139
+        ],
+        "description": [
+            "Can equip Katana and Chirijisayagata"
+        ],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 10": {
+        "name": "Modenali",
+        "other_name": [
+            "Modenali"
+        ],
+        "coord": [
+            [
+                39,
+                42,
+                75
+            ]
+        ],
+        "color": [
+            107,
+            187,
+            46
+        ],
+        "description": [
+            "Cannot equip magic"
+        ],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 11": {
+        "name": "Jorath",
+        "other_name": [
+            "Jorath"
+        ],
+        "coord": [
+            [
+                43,
+                48,
+                18
+            ]
+        ],
+        "color": [
+            198,
+            86,
+            80
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 12": {
+        "name": "K-2000",
+        "other_name": [
+            "K-2000"
+        ],
+        "coord": [
+            [
+                49,
+                34,
+                88
+            ]
+        ],
+        "color": [
+            254,
+            66,
+            191
+        ],
+        "description": [
+            "Can equip mechanical parts (Excavator, De-energizer, Steel Plating, Graphene Webbing). Cannot equip magic"
+        ],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 13": {
+        "name": "Ntleyana",
+        "other_name": [
+            "Ntleyana"
+        ],
+        "coord": [
+            [
+                52,
+                68,
+                39
+            ]
+        ],
+        "color": [
+            57,
+            38,
+            144
+        ],
+        "description": [
+            "Can equip ROM, for some reason"
+        ],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 14": {
+        "name": "Sir Cat",
+        "other_name": [
+            "Sir Cat"
+        ],
+        "coord": [
+            [
+                58,
+                41,
+                41
+            ]
+        ],
+        "color": [
+            53,
+            231,
+            139
+        ],
+        "description": [
+            "Can equip Meowitzer and Cutlery Set"
+        ],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 15": {
+        "name": "Auyue",
+        "other_name": [
+            "Auyue"
+        ],
+        "coord": [
+            [
+                61,
+                45,
+                50
+            ]
+        ],
+        "color": [
+            143,
+            103,
+            194
+        ],
+        "description": [],
+        "uses": [],
+        "ap_cost": []
+    },
+    "Perso 16": {
+        "name": "Valtoro",
+        "other_name": [
+            "Valtoro"
+        ],
+        "coord": [
+            [
+                78,
+                77,
+                19
+            ]
+        ],
+        "color": [
+            0,
+            131,
+            224
+        ],
+        "description": [
+            "Can equip Dragon Whisker and Megamalafluxare, Dragon Scale and Lizard Scale. Cannot equip weapons"
+        ],
+        "uses": [],
+        "ap_cost": []
+    }
+}

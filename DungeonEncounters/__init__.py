@@ -39,7 +39,7 @@ def reconstruct_bin(lvl, image_path, output_directory="output"):
 
                 f.write(hex_value.to_bytes(3, 'big'))
 
-    print(f"The {output_bin_path} file has been generated successfully.")
+    print(f"Generated .bin: {output_bin_path}")
 
 
 def generate_maze(grid, start_x, start_y, max_depth=50,
@@ -301,6 +301,7 @@ def refine_map(grid,
                     grid[x][y] = EMPTY
                     complete_path(grid, x, y, "RANDOM")
                     grid[x][y] = value_case
+                    print("Case 1")
 
                 elif (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
                       grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY):

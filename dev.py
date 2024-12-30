@@ -13,7 +13,7 @@ if not os.path.exists(output_dir):
 
 grid_size = 100
 
-json_file = "special_case.json"
+json_file = "special_tiles.json"
 wanderers_file = "wanderers.json"
 
 if not os.path.exists(json_file):
@@ -22,28 +22,28 @@ if not os.path.exists(wanderers_file):
     raise FileNotFoundError(f"{wanderers_file} cannot be found.")
 
 with open(json_file, "r") as f:
-    special_cases = json.load(f)
+    special_tiles = json.load(f)
 
 with open(wanderers_file, "r") as f:
     wanderers = json.load(f)
 
 color_to_value = {
-    tuple(case["color"]): int(key, 16) for key, case in special_cases.items()
+    tuple(tile["color"]): int(key, 16) for key, tile in special_tiles.items()
 }
 
 value_to_color = {
-    int(key, 16): tuple(case["color"]) for key, case in special_cases.items()
+    int(key, 16): tuple(tile["color"]) for key, tile in special_tiles.items()
 }
 
-EMPTY = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "EMPTY"), None)
-CASE = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "CASE"), None)
-HIDDEN = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "HIDDEN"), None)
-START_FLOOR_0 = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "00"), None)
-DESCENDING = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "01"), None)
-ASCENDING = next((int(key, 16) for key, case in special_cases.items() if case["name"] == "02"), None)
+EMPTY = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "EMPTY"), None)
+PATH = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "PATH"), None)
+HIDDEN = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "HIDDEN"), None)
+START_FLOOR_0 = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "00"), None)
+DESCENDING = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "01"), None)
+ASCENDING = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "02"), None)
 two_way_positions = {}
 
-if EMPTY is None or CASE is None or HIDDEN is None or START_FLOOR_0 is None or DESCENDING is None or ASCENDING is None:
+if EMPTY is None or PATH is None or HIDDEN is None or START_FLOOR_0 is None or DESCENDING is None or ASCENDING is None:
     raise ValueError("The necessary values are not present in the JSON file.")
 
 
@@ -68,19 +68,16 @@ def generate_floor_data(lvl, maps_data=None):
 
         grid = [[EMPTY for _ in range(grid_size)] for _ in range(grid_size)]  # EMPTY map
 
-        # Génération initiale de la carte
         DE.generate_voronoi(grid, start_x, start_y)
         DE.remove_random_paths(grid, 0.50)
 
-        # Position ASCENDING ou START_FLOOR_0
         grid[start_x][start_y] = START_FLOOR_0 if lvl == 0 else ASCENDING
-        DE.complete_path(grid, start_x, start_y, "CASE")
+        DE.complete_path(grid, start_x, start_y, "PATH")
 
-        # Placement DESCENDING
-        case_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {CASE, HIDDEN}]
+        tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
         descending_coords = None
         farthest_positions = sorted(
-            [(cx, cy) for cx, cy in case_positions],
+            [(cx, cy) for cx, cy in tile_positions],
             key=lambda pos: (pos[0] - start_x) ** 2 + (pos[1] - start_y) ** 2,
             reverse=True
         )
@@ -106,11 +103,11 @@ def generate_floor_data(lvl, maps_data=None):
 
                 if lvl == coord[0]:
                     DE.complete_path(grid, wx, wy, "HIDDEN")
-                    grid[wx][wy] = CASE
+                    grid[wx][wy] = PATH
                     print(f"Wanderer {wanderer_data['name']} placed ({wy}, {wx})")
 
         for riddle in ["Map Riddle", "Math Riddle"]:
-            for riddle_name, riddle_data in special_cases.items():
+            for riddle_name, riddle_data in special_tiles.items():
                 if "other_name" in riddle_data:
                     name, other_name = riddle_data["name"], riddle_data["other_name"]
                     if isinstance(other_name, list):
@@ -123,11 +120,11 @@ def generate_floor_data(lvl, maps_data=None):
                             if lvl == coord[0]:
                                 DE.complete_path(grid, wx, wy, "RANDOM")
                                 grid[wx][wy] = next(
-                                    (int(key, 16) for key, case in special_cases.items() if case["name"] == name), None)
+                                    (int(key, 16) for key, tile in special_tiles.items() if tile["name"] == name), None)
                                 print(f"{riddle} '{riddle_data['name']}' placed ({lvl}, {wx}, {wy})")
 
         for k in range(1, 11):
-            for two_way_name, two_way_data in special_cases.items():
+            for two_way_name, two_way_data in special_tiles.items():
                 if "other_name" in two_way_data:
                     name, other_name = two_way_data["name"], two_way_data["other_name"]
                     if isinstance(other_name, list):
@@ -140,15 +137,15 @@ def generate_floor_data(lvl, maps_data=None):
 
                         for coord in coords:
                             if lvl == coord[0]:
-                                random.shuffle(case_positions)
+                                random.shuffle(tile_positions)
 
-                                for cx, cy in case_positions:
+                                for cx, cy in tile_positions:
                                     dx, dy = random.randint(-4, 4), random.randint(-4, 4)
                                     nx, ny = cx + dx, cy + dy
                                     if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == EMPTY:
                                         grid[nx][ny] = next(
-                                            (int(key, 16) for key, case in special_cases.items() if
-                                             case["name"] == name),
+                                            (int(key, 16) for key, tile in special_tiles.items() if
+                                             tile["name"] == name),
                                             None)
                                         DE.complete_path(grid, nx, ny, "RANDOM")
 
@@ -164,12 +161,12 @@ def generate_floor_data(lvl, maps_data=None):
             if DE.is_connected(grid, start_x, start_y):
                 print(f"Maze connected on attempt {map_attempts} and iteration {iteration}.")
 
-                # Testing placing random case
+                # Testing placing random tile
                 if lvl == 2 and maps_data is not None:
                     map0_grid = maps_data[0]["grid"]
                     potential_coords = [
                         (x, y) for x in range(grid_size) for y in range(grid_size)
-                        if map0_grid[x][y] in {CASE, HIDDEN}
+                        if map0_grid[x][y] in {PATH, HIDDEN}
                     ]
 
                     for x, y in potential_coords:
@@ -184,8 +181,8 @@ def generate_floor_data(lvl, maps_data=None):
                         )
 
                         if surrounding_empty:
-                            grid[x][y] = CASE
-                            print(f"Placed CASE on level 2 at ({x}, {y}) based on level 0.")
+                            grid[x][y] = PATH
+                            print(f"Placed PATH on level 2 at ({x}, {y}) based on level 0.")
                             break
 
                 return grid, descending_coords

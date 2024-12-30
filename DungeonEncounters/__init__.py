@@ -16,7 +16,7 @@ def reconstruct_bin(lvl, image_path, output_directory="output"):
     image = Image.open(image_path)
     pixels = image.load()
 
-    with open("special_case.json", "r") as f:
+    with open("special_tiles.json", "r") as f:
         special_cases = json.load(f)
 
     width, height = image.size
@@ -29,8 +29,8 @@ def reconstruct_bin(lvl, image_path, output_directory="output"):
                 r, g, b = pixels[x, y]
 
                 hex_value = None
-                for key, case in special_cases.items():
-                    if case["color"] == [r, g, b]:
+                for key, tile in special_cases.items():
+                    if tile["color"] == [r, g, b]:
                         hex_value = int(key, 16)
                         break
 
@@ -42,11 +42,13 @@ def reconstruct_bin(lvl, image_path, output_directory="output"):
     print(f"Generated .bin: {output_bin_path}")
 
 
+# Map generator (maze, road, voronoi)
+# Maze
 def generate_maze(grid, start_x, start_y, max_depth=50,
-                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                             case["name"] == "CASE"), None),
-                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                              case["name"] == "EMPTY"), None), grid_size=100):
+                  PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                             tile["name"] == "PATH"), None),
+                  EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                              tile["name"] == "EMPTY"), None), grid_size=100):
     def is_valid_move(grid, start_x, start_y, dx, dy):
         for i in range(1, 5):
             nx, ny = start_x + dx * i, start_y + dy * i
@@ -65,21 +67,22 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
             for i in range(1, 3):
                 nx, ny = start_x + dx * i, start_y + dy * i
                 if 0 <= nx < grid_size and 0 <= ny < grid_size:
-                    grid[nx][ny] = CASE
+                    grid[nx][ny] = PATH
             generate_maze(grid, nx, ny, max_depth - 1)
 
 
+# Road
 def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
-                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                             case["name"] == "CASE"), None),
-                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                              case["name"] == "EMPTY"), None)):
+                  PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                             tile["name"] == "PATH"), None),
+                  EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                              tile["name"] == "EMPTY"), None)):
     def neighbors(start_x, start_y):
         return [(start_x + dx, start_y + dy) for dx, dy in
                 [(0, route_width), (route_width, 0), (0, -route_width), (-route_width, 0)]
                 if 0 <= start_x + dx < grid_size and 0 <= start_y + dy < grid_size]
 
-    grid[start_x][start_y] = CASE
+    grid[start_x][start_y] = PATH
     frontier = neighbors(start_x, start_y)
     shuffle(frontier)
 
@@ -88,9 +91,9 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
         if grid[nx][ny] == EMPTY:
             for i in range(route_width):
                 if 0 <= nx - i < grid_size:
-                    grid[nx - i][ny] = CASE
+                    grid[nx - i][ny] = PATH
                 if 0 <= ny - i < grid_size:
-                    grid[nx][ny - i] = CASE
+                    grid[nx][ny - i] = PATH
 
             for neighbor in neighbors(nx, ny):
                 if grid[neighbor[0]][neighbor[1]] == EMPTY:
@@ -100,11 +103,12 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
     return grid
 
 
+# Voronoi
 def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=50,
-                     CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                case["name"] == "CASE"), None),
-                     EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                 case["name"] == "EMPTY"), None)):
+                     PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                tile["name"] == "PATH"), None),
+                     EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                 tile["name"] == "EMPTY"), None)):
     def bresenham_line(x1, y1, x2, y2):
         points = []
         dx = abs(x2 - x1)
@@ -153,16 +157,17 @@ def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=50,
                 0 <= end[0] < len(grid) and 0 <= end[1] < len(grid[0])):
             for x, y in bresenham_line(start[0], start[1], end[0], end[1]):
                 if 0 <= x < len(grid) and 0 <= y < len(grid[0]):
-                    grid[x][y] = CASE
+                    grid[x][y] = PATH
 
     return grid
 
 
+# Check that the maze has all its boxes (PATH and HIDDEN) connected to each other (except special boxes).
 def is_connected(grid, start_x, start_y,
-                 CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                            case["name"] == "CASE"), None),
-                 EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                             case["name"] == "EMPTY"), None), grid_size=100):
+                 PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                            tile["name"] == "PATH"), None),
+                 EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                             tile["name"] == "EMPTY"), None), grid_size=100):
     visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]
     stack = [(start_x, start_y)]
 
@@ -187,12 +192,12 @@ def is_connected(grid, start_x, start_y,
 
 
 def remove_random_paths(grid, percentage_to_remove,
-                        CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
-                                   if case["name"] == "CASE"), None),
-                        EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                    case["name"] == "EMPTY"), None),
-                        HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                     case["name"] == "HIDDEN"), None), grid_size=100):
+                        PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                                   if tile["name"] == "PATH"), None),
+                        EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                    tile["name"] == "EMPTY"), None),
+                        HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     tile["name"] == "HIDDEN"), None), grid_size=100):
     def dfs(grid, x, y, visited):
         stack = [(x, y)]
         while stack:
@@ -202,14 +207,14 @@ def remove_random_paths(grid, percentage_to_remove,
                 directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
                 for dx, dy in directions:
                     nx, ny = cx + dx, cy + dy
-                    if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
+                    if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == PATH:
                         stack.append((nx, ny))
 
-    paths = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {CASE, HIDDEN}]
+    paths = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
     random.shuffle(paths)
 
     num_to_remove = int(len(paths) * percentage_to_remove)
-    start_x, start_y = next((x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == CASE)
+    start_x, start_y = next((x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == PATH)
 
     for i in range(num_to_remove):
         x, y = paths[i]
@@ -219,7 +224,7 @@ def remove_random_paths(grid, percentage_to_remove,
         random.shuffle(directions)
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
-            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
+            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == PATH:
                 to_remove.append((nx, ny))
                 if len(to_remove) == 5:
                     break
@@ -232,26 +237,26 @@ def remove_random_paths(grid, percentage_to_remove,
         visited = set()
         dfs(grid, start_x, start_y, visited)
 
-        if len(visited) != sum(1 for px, py in paths if grid[px][py] == CASE):
+        if len(visited) != sum(1 for px, py in paths if grid[px][py] == PATH):
             for rx, ry in removed_cases:
-                grid[rx][ry] = CASE
+                grid[rx][ry] = PATH
 
 
 def complete_path(grid, x, y, case_type="RANDOM",
-                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
-                             if case["name"] == "CASE"), None),
-                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                              case["name"] == "EMPTY"), None),
-                  HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                               case["name"] == "HIDDEN"), None), grid_size=100):
+                  PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                             if tile["name"] == "PATH"), None),
+                  EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                              tile["name"] == "EMPTY"), None),
+                  HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                               tile["name"] == "HIDDEN"), None), grid_size=100):
     visited = set()
     queue = deque([(x, y, [])])
     visited.add((x, y))
 
     if case_type == "RANDOM":
-        target_case = random.choice([CASE, HIDDEN])
-    elif case_type == "CASE":
-        target_case = CASE
+        target_case = random.choice([PATH, HIDDEN])
+    elif case_type == "PATH":
+        target_case = PATH
     elif case_type == "HIDDEN":
         target_case = HIDDEN
     else:
@@ -260,7 +265,7 @@ def complete_path(grid, x, y, case_type="RANDOM",
     while queue:
         cx, cy, path = queue.popleft()
 
-        if grid[cx][cy] == CASE:
+        if grid[cx][cy] == PATH:
             for px, py in path:
                 if grid[px][py] == EMPTY:
                     grid[px][py] = target_case
@@ -269,26 +274,26 @@ def complete_path(grid, x, y, case_type="RANDOM",
         for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0),
                        (1, -1), (-1, 1), (1, 1), (-1, -1)]:
             nx, ny = cx + dx, cy + dy
-            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, CASE] and (
+            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH] and (
                     nx, ny) not in visited:
                 visited.add((nx, ny))
                 queue.append((nx, ny, path + [(nx, ny)]))
 
 
 def refine_map(grid,
-               CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
-                          if case["name"] == "CASE"), None),
-               EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                           case["name"] == "EMPTY"), None),
-               HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                            case["name"] == "HIDDEN"), None), grid_size=100):
+               PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                          if tile["name"] == "PATH"), None),
+               EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                           tile["name"] == "EMPTY"), None),
+               HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                            tile["name"] == "HIDDEN"), None), grid_size=100):
     for x in range(1, grid_size - 1):
         for y in range(1, grid_size - 1):
             if grid[x][y] != EMPTY:
                 value_case = grid[x][y]
                 special_cases = {
-                    int(key, 16): case["name"]
-                    for key, case in json.load(open("special_case.json")).items()
+                    int(key, 16): tile["name"]
+                    for key, tile in json.load(open("special_tiles.json")).items()
                 }
 
                 case_name = special_cases.get(value_case, "UNKNOWN")
@@ -305,7 +310,7 @@ def refine_map(grid,
 
                 elif (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
                       grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY):
-                    if case_name not in ['CASE', "HIDDEN"]:
+                    if case_name not in ['PATH', "HIDDEN"]:
                         value_case = HIDDEN
 
                     if grid[x - 1][y - 1] != EMPTY:

@@ -13,7 +13,7 @@ if not os.path.exists(output_dir):
 
 grid_size = 100
 
-json_file = "special_case.json"
+json_file = "special_tiles.json"
 wanderers_file = "wanderers.json"
 
 if not os.path.exists(json_file):

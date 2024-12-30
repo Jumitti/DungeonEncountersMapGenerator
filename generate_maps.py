@@ -1,10 +1,11 @@
 import json
-from PIL import Image
-import random
 import os
-from collections import deque
-import DungeonEncounters as DE
+import random
 import re
+
+from PIL import Image
+
+import DungeonEncounters as DE
 
 output_dir = "output"
 if not os.path.exists(output_dir):
@@ -46,20 +47,23 @@ if EMPTY is None or CASE is None or HIDDEN is None or START_FLOOR_0 is None or D
     raise ValueError("The necessary values are not present in the JSON file.")
 
 
-def generate_floor_image(output_image_path, i, ascending_coords=None):
-    grid = [[EMPTY for _ in range(grid_size)] for _ in range(grid_size)]
+def generate_floor(lvl, ascending_coords=None):
+    output_image_path = os.path.join(output_dir, f"Map_m{lvl}.png")
 
-    if i == 0:
+    grid = [[EMPTY for _ in range(grid_size)] for _ in range(grid_size)]  # EMPTY map
+
+    # Map initiation coordinates
+    if lvl == 0:
         ascending_coords = (50, 50)
     start_x, start_y = ascending_coords
 
-    DE.generate_voronoi_map(grid, start_x, start_y)
+    DE.generate_voronoi(grid, start_x, start_y)
 
     DE.remove_random_paths(grid, 0.50)
 
-    if i == 0:
+    if lvl == 0:
         grid[start_x][start_y] = START_FLOOR_0
-    elif i > 0 and ascending_coords:
+    elif lvl > 0 and ascending_coords:
         grid[start_x][start_y] = ASCENDING
     DE.complete_path(grid, start_x, start_y, "CASE")
 
@@ -91,7 +95,7 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
         for coord in coords:
             wy, wx = coord[1], coord[2]
 
-            if i == coord[0]:
+            if lvl == coord[0]:
                 DE.complete_path(grid, wx, wy, "HIDDEN")
                 grid[wx][wy] = CASE
                 print(f"Wanderer {wanderer_data['name']} placed ({wy}, {wx})")
@@ -107,11 +111,11 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
                     for coord in coords:
                         wy, wx = coord[1], coord[2]
 
-                        if i == coord[0]:
+                        if lvl == coord[0]:
                             DE.complete_path(grid, wx, wy, "RANDOM")
                             grid[wx][wy] = next(
                                 (int(key, 16) for key, case in special_cases.items() if case["name"] == name), None)
-                            print(f"{riddle} '{riddle_data['name']}' placed ({i}, {wx}, {wy})")
+                            print(f"{riddle} '{riddle_data['name']}' placed ({lvl}, {wx}, {wy})")
 
     for k in range(1, 11):
         for two_way_name, two_way_data in special_cases.items():
@@ -126,7 +130,7 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
                         continue
 
                     for coord in coords:
-                        if i == coord[0]:
+                        if lvl == coord[0]:
                             random.shuffle(case_positions)
 
                             for cx, cy in case_positions:
@@ -140,8 +144,8 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
 
                                     if name not in two_way_positions:
                                         two_way_positions[name] = []
-                                    two_way_positions[name].append((i, nx, ny))
-                                    print(f"Two-way Teleporter {k} '{two_way_data['name']}' placed ({i}, {nx}, {ny})")
+                                    two_way_positions[name].append((lvl, nx, ny))
+                                    print(f"Two-way Teleporter {k} '{two_way_data['name']}' placed ({lvl}, {nx}, {ny})")
 
                                     break
 
@@ -171,25 +175,23 @@ def generate_floor_image(output_image_path, i, ascending_coords=None):
     image.save(output_image_path)
     print(f"Generated image :{output_image_path}")
 
-    return descending_coords
+    return descending_coords, output_image_path
 
 
-def run(nb_maps, generate_bin=False):
-    for j in range(nb_maps):
-        image_path = os.path.join(output_dir, f"generated_maze_{j}.png")
-        json_path = "special_case.json"
-        output_bin_path = os.path.join(output_dir, f"Map_m{j}.bin")
+def run(nb_lvl, maze_type="voronoi", generate_bin=False):
+    descending_coords = None
 
-        if j == 0:
-            descending_coords = generate_floor_image(image_path, j)
-        else:
-            descending_coords = generate_floor_image(image_path, j, ascending_coords=descending_coords)
+    if maze_type not in ["maze", "road", "voronoi", "shuffle"]:
+        raise ValueError('maze_type must be "maze", "road", "voronoi", "shuffle"')
 
-        if generate_bin is True:
-            DE.reconstruct_bin(image_path, json_path, output_bin_path)
+    for i in range(nb_lvl):
 
-            print(f"Image and binary file for maze {j} generated in 'output' folder.")
+        descending_coords, image_path = generate_floor(lvl=i, ascending_coords=descending_coords)
+
+        if generate_bin:
+            DE.reconstruct_bin(lvl=i, image_path=image_path, output_directory=output_dir)
+            print(f"Image and binary file for maze {i} generated in 'output' folder.")
 
 
 if __name__ == "__main__":
-    run(nb_maps=2, generate_bin=False)
+    run(nb_lvl=3, maze_type="shuffle", generate_bin=True)

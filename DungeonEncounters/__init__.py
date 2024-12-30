@@ -1,18 +1,22 @@
 import json
+import os
 import random
-import numpy as np
 from collections import deque
-from random import shuffle, choice
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from random import shuffle
 
+import numpy as np
 from PIL import Image
+from scipy.spatial import Voronoi
 
 
-def reconstruct_bin(image_path, json_path, output_bin_path):
+# Generate .bin file from image 100x100
+def reconstruct_bin(lvl, image_path, output_directory="output"):
+    output_bin_path = os.path.join(output_directory, f"Map_m{lvl}.bin")
+
     image = Image.open(image_path)
     pixels = image.load()
 
-    with open(json_path, "r") as f:
+    with open("special_case.json", "r") as f:
         special_cases = json.load(f)
 
     width, height = image.size
@@ -38,19 +42,18 @@ def reconstruct_bin(image_path, json_path, output_bin_path):
     print(f"The {output_bin_path} file has been generated successfully.")
 
 
-def is_valid_move(grid, x, y, dx, dy, EMPTY=next(
-    (int(key, 16) for key, case in json.load(open("special_case.json")).items() if case["name"] == "EMPTY"), None),
-                  grid_size=100):
-    for i in range(5, 20):
-        nx, ny = x + dx * i, y + dy * i
-        if not (0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == EMPTY):
-            return False
-    return True
+def generate_maze(grid, start_x, start_y, max_depth=50,
+                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                             case["name"] == "CASE"), None),
+                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                              case["name"] == "EMPTY"), None), grid_size=100):
+    def is_valid_move(grid, start_x, start_y, dx, dy):
+        for i in range(1, 5):
+            nx, ny = start_x + dx * i, start_y + dy * i
+            if not (0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == EMPTY):
+                return False
+        return True
 
-
-def generate_maze(grid, x, y, max_depth=50, CASE=next(
-    (int(key, 16) for key, case in json.load(open("special_case.json")).items() if case["name"] == "CASE"), None),
-                  grid_size=100):
     if max_depth <= 0:
         return
 
@@ -58,26 +61,26 @@ def generate_maze(grid, x, y, max_depth=50, CASE=next(
     random.shuffle(directions)
 
     for dx, dy in directions:
-        if is_valid_move(grid, x, y, dx, dy):
-            for i in range(1, 5):
-                nx, ny = x + dx * i, y + dy * i
+        if is_valid_move(grid, start_x, start_y, dx, dy):
+            for i in range(1, 3):
+                nx, ny = start_x + dx * i, start_y + dy * i
                 if 0 <= nx < grid_size and 0 <= ny < grid_size:
                     grid[nx][ny] = CASE
             generate_maze(grid, nx, ny, max_depth - 1)
 
 
-def generate_random_routes(grid, grid_size=100, x=50, y=50, route_width=3,
-                           CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                      case["name"] == "CASE"), None),
-                           EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                       case["name"] == "EMPTY"), None)):
-    def neighbors(x, y):
-        return [(x + dx, y + dy) for dx, dy in
+def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
+                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                             case["name"] == "CASE"), None),
+                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                              case["name"] == "EMPTY"), None)):
+    def neighbors(start_x, start_y):
+        return [(start_x + dx, start_y + dy) for dx, dy in
                 [(0, route_width), (route_width, 0), (0, -route_width), (-route_width, 0)]
-                if 0 <= x + dx < grid_size and 0 <= y + dy < grid_size]
+                if 0 <= start_x + dx < grid_size and 0 <= start_y + dy < grid_size]
 
-    grid[x][y] = CASE
-    frontier = neighbors(x, y)
+    grid[start_x][start_y] = CASE
+    frontier = neighbors(start_x, start_y)
     shuffle(frontier)
 
     while frontier:
@@ -97,12 +100,33 @@ def generate_random_routes(grid, grid_size=100, x=50, y=50, route_width=3,
     return grid
 
 
-def generate_voronoi_map(grid, start_x, start_y, grid_size=100, num_sites=50,
-                         CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                    case["name"] == "CASE"), None),
-                         EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                     case["name"] == "EMPTY"), None)
-                         ):
+def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=50,
+                     CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                case["name"] == "CASE"), None),
+                     EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                 case["name"] == "EMPTY"), None)):
+    def bresenham_line(x1, y1, x2, y2):
+        points = []
+        dx = abs(x2 - x1)
+        dy = abs(y2 - y1)
+        sx = 1 if x1 < x2 else -1
+        sy = 1 if y1 < y2 else -1
+        err = dx - dy
+
+        while True:
+            points.append((x1, y1))
+            if x1 == x2 and y1 == y2:
+                break
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                x1 += sx
+            if e2 < dx:
+                err += dx
+                y1 += sy
+
+        return points
+
     half_grid_size = grid_size // 2
 
     min_x = max(0, start_x - half_grid_size)
@@ -134,51 +158,11 @@ def generate_voronoi_map(grid, start_x, start_y, grid_size=100, num_sites=50,
     return grid
 
 
-def bresenham_line(x1, y1, x2, y2):
-    points = []
-    dx = abs(x2 - x1)
-    dy = abs(y2 - y1)
-    sx = 1 if x1 < x2 else -1
-    sy = 1 if y1 < y2 else -1
-    err = dx - dy
-
-    while True:
-        points.append((x1, y1))
-        if x1 == x2 and y1 == y2:
-            break
-        e2 = 2 * err
-        if e2 > -dy:
-            err -= dy
-            x1 += sx
-        if e2 < dx:
-            err += dx
-            y1 += sy
-
-    return points
-
-
-def dfs(grid, x, y, visited,
-        CASE=next(
-            (int(key, 16) for key, case in json.load(open("special_case.json")).items() if case["name"] == "CASE"),
-            None), grid_size=100):
-    stack = [(x, y)]
-    while stack:
-        cx, cy = stack.pop()
-        if (cx, cy) not in visited:
-            visited.add((cx, cy))
-            directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-            for dx, dy in directions:
-                nx, ny = cx + dx, cy + dy
-                if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
-                    stack.append((nx, ny))
-
-
 def is_connected(grid, start_x, start_y,
                  CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
                             case["name"] == "CASE"), None),
                  EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                             case["name"] == "EMPTY"), None),
-                 grid_size=100):
+                             case["name"] == "EMPTY"), None), grid_size=100):
     visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]
     stack = [(start_x, start_y)]
 
@@ -203,11 +187,25 @@ def is_connected(grid, start_x, start_y,
 
 
 def remove_random_paths(grid, percentage_to_remove,
-                        CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                   case["name"] == "CASE"), None),
+                        CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
+                                   if case["name"] == "CASE"), None),
                         EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                                    case["name"] == "EMPTY"), None), grid_size=100):
-    paths = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == CASE]
+                                    case["name"] == "EMPTY"), None),
+                        HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
+                                     case["name"] == "HIDDEN"), None), grid_size=100):
+    def dfs(grid, x, y, visited):
+        stack = [(x, y)]
+        while stack:
+            cx, cy = stack.pop()
+            if (cx, cy) not in visited:
+                visited.add((cx, cy))
+                directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+                for dx, dy in directions:
+                    nx, ny = cx + dx, cy + dy
+                    if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] == CASE:
+                        stack.append((nx, ny))
+
+    paths = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {CASE, HIDDEN}]
     random.shuffle(paths)
 
     num_to_remove = int(len(paths) * percentage_to_remove)
@@ -257,7 +255,7 @@ def complete_path(grid, x, y, case_type="RANDOM",
     elif case_type == "HIDDEN":
         target_case = HIDDEN
     else:
-        raise ValueError(f"case_type invalide: {case_type}")
+        raise ValueError(f"case_type invalid: {case_type}")
 
     while queue:
         cx, cy, path = queue.popleft()
@@ -277,13 +275,13 @@ def complete_path(grid, x, y, case_type="RANDOM",
                 queue.append((nx, ny, path + [(nx, ny)]))
 
 
-def refine_map(grid, grid_size=100,
+def refine_map(grid,
                CASE=next((int(key, 16) for key, case in json.load(open("special_case.json")).items()
                           if case["name"] == "CASE"), None),
                EMPTY=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
                            case["name"] == "EMPTY"), None),
                HIDDEN=next((int(key, 16) for key, case in json.load(open("special_case.json")).items() if
-                            case["name"] == "HIDDEN"), None)):
+                            case["name"] == "HIDDEN"), None), grid_size=100):
     for x in range(1, grid_size - 1):
         for y in range(1, grid_size - 1):
             if grid[x][y] != EMPTY:

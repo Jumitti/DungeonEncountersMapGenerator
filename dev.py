@@ -51,7 +51,7 @@ if EMPTY is None or PATH is None or HIDDEN is None or START_FLOOR_0 is None or D
     raise ValueError(color_settings("The necessary values are not present in the JSON file.", bcolors.FAIL))
 
 
-def generate_floor_data(lvl, maps_data=None):
+def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
     max_iterations = 5
     max_map_attempts = 5
     map_attempts = 0
@@ -183,7 +183,7 @@ def save_floor_image(grid, output_image_path):
     print(color_settings(f"Generated image: {output_image_path}", bcolors.OKGREEN))
 
 
-def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None):
+def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mode=False):
     if maze_type not in ["maze", "road", "voronoi", "shuffle"]:
         raise ValueError(color_settings('maze_type must be "maze", "road", "voronoi", "shuffle"', bcolors.FAIL))
 
@@ -191,11 +191,11 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None):
 
     if one_lvl is not None:
         for lvl in tqdm(one_lvl, desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
-            grid = generate_floor_data(lvl=lvl, maps_data=maps_data)
+            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, cheat_mode=cheat_mode)
             maps_data.append({"level": lvl, "grid": grid})
     else:
         for i in tqdm(range(nb_lvl), desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
-            grid = generate_floor_data(lvl=i, maps_data=maps_data)
+            grid = generate_floor_data(lvl=i, maps_data=maps_data, cheat_mode=cheat_mode)
             maps_data.append({"level": i, "grid": grid})
 
     for data in tqdm(maps_data, desc=color_settings("Saving images and generating binaries", bcolors.WARNING),
@@ -205,10 +205,10 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None):
         output_image_path = os.path.join(output_dir, f"Map_m{lvl}.png")
         save_floor_image(grid, output_image_path)
 
-        if generate_bin:
+        if generate_bin is True:
             DE.reconstruct_bin(lvl=lvl, image_path=output_image_path, output_directory=output_dir)
             print(color_settings(f"Binary and image files for level {lvl} saved in: {output_dir}", bcolors.OKGREEN))
 
 
 if __name__ == "__main__":
-    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[97])
+    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[0, 51], cheat_mode=False)

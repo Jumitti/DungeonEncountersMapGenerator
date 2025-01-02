@@ -68,6 +68,7 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
         return True
 
     if max_depth <= 0:
+        print(color_settings(f"Maze (type: maze) generated.", bcolors.OKGREEN))
         return
 
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -80,8 +81,6 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
                 if 0 <= nx < grid_size and 0 <= ny < grid_size:
                     grid[nx][ny] = PATH
             generate_maze(grid, nx, ny, max_depth - 1)
-
-    print(color_settings(f"Maze (type: maze) generated.", bcolors.OKGREEN))
 
 
 # Road

@@ -1,5 +1,5 @@
 {
-    "Perso 1": {
+    "Character 1": {
         "name": "Sesspare",
         "other_name": [
             "Sesspare"
@@ -20,7 +20,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 2": {
+    "Character 2": {
         "name": "Shunga",
         "other_name": [
             "Shunga"
@@ -41,7 +41,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 3": {
+    "Character 3": {
         "name": "Rodovich",
         "other_name": [
             "Rodovich"
@@ -62,7 +62,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 4": {
+    "Character 4": {
         "name": "Gracia",
         "other_name": [
             "Gracia"
@@ -83,7 +83,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 5": {
+    "Character 5": {
         "name": "McAllie",
         "other_name": [
             "McAllie"
@@ -104,7 +104,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 6": {
+    "Character 6": {
         "name": "Ilbertha",
         "other_name": [
             "Ilbertha"
@@ -125,7 +125,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 7": {
+    "Character 7": {
         "name": "Nalpurna",
         "other_name": [
             "Nalpurna"
@@ -146,7 +146,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 8": {
+    "Character 8": {
         "name": "Jufren",
         "other_name": [
             "Jufren"
@@ -167,7 +167,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 9": {
+    "Character 9": {
         "name": "Houk Gau",
         "other_name": [
             "Houk Gau"
@@ -190,7 +190,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 10": {
+    "Character 10": {
         "name": "Modenali",
         "other_name": [
             "Modenali"
@@ -213,7 +213,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 11": {
+    "Character 11": {
         "name": "Jorath",
         "other_name": [
             "Jorath"
@@ -234,7 +234,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 12": {
+    "Character 12": {
         "name": "K-2000",
         "other_name": [
             "K-2000"
@@ -257,7 +257,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 13": {
+    "Character 13": {
         "name": "Ntleyana",
         "other_name": [
             "Ntleyana"
@@ -280,7 +280,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 14": {
+    "Character 14": {
         "name": "Sir Cat",
         "other_name": [
             "Sir Cat"
@@ -303,7 +303,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 15": {
+    "Character 15": {
         "name": "Auyue",
         "other_name": [
             "Auyue"
@@ -324,7 +324,7 @@
         "uses": [],
         "ap_cost": []
     },
-    "Perso 16": {
+    "Character 16": {
         "name": "Valtoro",
         "other_name": [
             "Valtoro"

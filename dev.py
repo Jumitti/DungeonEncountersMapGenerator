@@ -60,10 +60,27 @@ def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
     if lvl == 0 or len(maps_data) == 0:
         ascending_coords = (50, 50)
     else:
+        descending_types = [
+            int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "01"
+        ]
+
+        if not descending_types:
+            raise ValueError("No tile with name '01' found in special_tiles.")
+
         previous_grid = maps_data[-1]["grid"]
-        ascending_coords = next(
-            (x, y) for x in range(grid_size) for y in range(grid_size) if previous_grid[x][y] == DESCENDING
-        )
+
+        ascending_coords = None
+        for DESCENDING in descending_types:
+            ascending_coords = next(
+                ((x, y) for x in range(grid_size) for y in range(grid_size) if previous_grid[x][y] == DESCENDING),
+                None
+            )
+            if ascending_coords is not None:
+                break
+
+        if ascending_coords is None:
+            raise ValueError("No DESCENDING tile found in the previous grid.")
+
     start_x, start_y = ascending_coords
 
     while map_attempts < max_map_attempts:
@@ -75,10 +92,16 @@ def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
         DE.generate_voronoi(grid, start_x, start_y)
         DE.remove_random_paths(grid, 0.50)
 
-        grid[start_x][start_y] = START_FLOOR_0 if lvl == 0 else ASCENDING
-        print(color_settings(
-            f"{'00 Start' if lvl == 0 else '02 Upstairs'}: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
-        DE.complete_path(grid, start_x, start_y, "PATH")
+        if cheat_mode is True and lvl == 0:
+            DE.cheat_mode(grid, lvl, special_tiles)
+
+        if lvl == 0:
+            grid[start_x][start_y] = START_FLOOR_0
+            print(color_settings(
+                f"'00 Start: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
+            DE.complete_path(grid, start_x, start_y, "PATH")
+        else:
+            DE.place_ascending(grid, start_x, start_y, lvl, special_tiles)
 
         DE.place_wanderers(grid, lvl, wanderers)
 
@@ -151,7 +174,6 @@ def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
                 #             grid[x][y] = PATH
                 #             print(f"Placed PATH on level 2 at ({x}, {y}) based on level 0.")
                 #             break
-
                 if len(nb_special_tiles) == len([(x, y) for x in range(grid_size) for y in range(grid_size) if
                                                  grid[x][y] not in [EMPTY, PATH, HIDDEN, CROSS]]):
                     return grid
@@ -211,4 +233,4 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mod
 
 
 if __name__ == "__main__":
-    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[0, 51], cheat_mode=False)
+    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=[59, 60, 61], cheat_mode=False)

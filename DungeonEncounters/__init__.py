@@ -282,37 +282,34 @@ def connect_disconnected_groups(grid,
                                 CROSS=next(
                                     (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                      tile["name"] == "CROSS"), None), grid_size=100):
-    while True:
-        visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]
-        groups = []
+    # while True:
+    visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]
+    groups = []
 
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-        for x in range(grid_size):
-            for y in range(grid_size):
-                if grid[x][y] not in [EMPTY, CROSS] and not visited[x][y]:
-                    group = []
-                    stack = [(x, y)]
-                    visited[x][y] = True
+    for x in range(grid_size):
+        for y in range(grid_size):
+            if grid[x][y] not in [EMPTY, CROSS] and not visited[x][y]:
+                group = []
+                stack = [(x, y)]
+                visited[x][y] = True
 
-                    while stack:
-                        cx, cy = stack.pop()
-                        group.append((cx, cy))
+                while stack:
+                    cx, cy = stack.pop()
+                    group.append((cx, cy))
 
-                        for dx, dy in directions:
-                            nx, ny = cx + dx, cy + dy
+                    for dx, dy in directions:
+                        nx, ny = cx + dx, cy + dy
 
-                            if 0 <= nx < grid_size and 0 <= ny < grid_size and not visited[nx][ny] and grid[nx][
-                                ny] not in [
-                                EMPTY, CROSS]:
-                                visited[nx][ny] = True
-                                stack.append((nx, ny))
+                        if (0 <= nx < grid_size and 0 <= ny < grid_size and
+                                not visited[nx][ny] and grid[nx][ny] not in [EMPTY, CROSS]):
+                            visited[nx][ny] = True
+                            stack.append((nx, ny))
 
-                    groups.append(group)
+                groups.append(group)
 
-        if len(groups) <= 1:
-            break
-
+    if len(groups) > 1:
         paired_groups = []
         for i in range(0, len(groups) - 1, 2):
             paired_groups.append((groups[i], groups[i + 1]))
@@ -531,6 +528,28 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                                  key == downstairs_key), None)
                             print(color_settings(f"01 Downstairs: z={lvl}, x={nx}, y={ny}", bcolors.OKBLUE))
                             break
+
+
+# Place ascending
+def place_ascending(grid, start_x, start_y, lvl, special_tiles,
+                     PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                                if tile["name"] == "PATH"), None),
+                     EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                 tile["name"] == "EMPTY"), None),
+                     HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                  tile["name"] == "HIDDEN"), None), grid_size=100):
+
+    for upstairs_key, upstairs_data in special_tiles.items():
+        if upstairs_data["name"] == "02":
+            coords = upstairs_data["coord"]
+            for coord in coords:
+                if lvl == coord[0]:
+                    complete_path(grid, start_x, start_y, "RANDOM")
+                    grid[start_x][start_y] = next(
+                        (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                         key == upstairs_key), None)
+                    print(color_settings(f"02 Upstairs: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
+                    break
 
 
 def place_wanderers(grid, lvl, wanderers,
@@ -1131,3 +1150,42 @@ def place_cross(grid, lvl, special_tiles,
                                     f"{cross_data['name']} path: z={lvl}, x={cx}, y={cy} {nb_empty}",
                                     bcolors.GRAY, bcolors.BG_BLACK))
                                 break
+
+
+def cheat_mode(grid, lvl, special_tiles,
+               EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                            tile["name"] == "EMPTY"), None), grid_size=100):
+    def find_next_empty(x, y):
+        while True:
+            if 0 <= x < grid_size and 0 <= y < grid_size and grid[x][y] == EMPTY:
+                return x, y
+            x += 1
+            if x >= grid_size:
+                x = 0
+                y += 1
+            if y >= grid_size:
+                x, y = 0, 0
+
+    x, y = 0, 0
+    for cheat_key, cheat_data in special_tiles.items():
+        if cheat_data.get("type_event") in ["Movement", "Battle", "Riddles"] or (
+            "other_name" in cheat_data and
+            re.search("Treasure", " ".join(cheat_data["other_name"]))
+        ):
+            x, y = find_next_empty(x, y)
+
+            tile_value = next(
+                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if key == cheat_key),
+                None
+            )
+            if tile_value is not None:
+                grid[x][y] = tile_value
+
+                print(color_settings(
+                    f"{cheat_data['name']} {cheat_data.get('other_name', '')}: z={lvl}, x={x}, y={y}",
+                    bcolors.BLACK, bcolors.BG_WHITE, bcolors.BLINK
+                ))
+
+    complete_path(grid, x // 2, y, "PATH")
+
+

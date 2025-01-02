@@ -83337,9 +83337,9 @@
             156
         ],
         "other_name": [
-            "1B - The Gargoyle's Firearms"
+            "The Gargoyle's Firearms"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x101af": {
         "name": "af",
@@ -85394,9 +85394,9 @@
             187
         ],
         "other_name": [
-            "1C - The Shark's Secret Selection"
+            "The Shark's Secret Selection"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x10136": {
         "name": "36",
@@ -86306,11 +86306,7 @@
             98,
             205,
             109
-        ],
-        "other_name": [
-            "CROSS"
-        ],
-        "type_event": "Market/Other"
+        ]
     },
     "0x101e2": {
         "name": "e2",
@@ -86405,7 +86401,7 @@
         "other_name": [
             "The Lamia's Potations"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x101e4": {
         "name": "e4",
@@ -87852,9 +87848,9 @@
             66
         ],
         "other_name": [
-            "1F - The Ghost's Goods Exchange"
+            "The Ghost's Goods Exchange"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x101ed": {
         "name": "ed",
@@ -88320,9 +88316,9 @@
             83
         ],
         "other_name": [
-            "1E - The Stalker's Game Shop"
+            "The Stalker's Game Shop"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x1012f": {
         "name": "2f",
@@ -88474,7 +88470,7 @@
         "other_name": [
             "Cavy Idol"
         ],
-        "type_event": "Exits"
+        "type_event": "Market/Other"
     },
     "0x1015f": {
         "name": "5f",

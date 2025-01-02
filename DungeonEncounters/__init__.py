@@ -425,7 +425,8 @@ def refine_map(grid, case_type="RANDOM",
                 }
 
                 # case_name = special_cases.get(grid[x][y], "UNKNOWN")
-                target_case = HIDDEN if special_cases.get(grid[x][y], "UNKNOWN") not in ['PATH', "HIDDEN"] else grid[x][y]
+                target_case = HIDDEN if special_cases.get(grid[x][y], "UNKNOWN") not in ['PATH', "HIDDEN"] else grid[x][
+                    y]
 
                 if x == 0 or x == grid_size - 1 or y == 0 or y == grid_size - 1:
                     if x == 0 or x == grid_size - 1:
@@ -503,7 +504,6 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                                  tile["name"] == "EMPTY"), None),
                      HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                   tile["name"] == "HIDDEN"), None), grid_size=100):
-
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     farthest_positions = sorted(
@@ -570,7 +570,15 @@ def place_riddles(grid, lvl, special_tiles):
                                 bcolors.ORANGE if riddle == "Map Riddle" else bcolors.LIGHTORANGE))
 
 
-def place_riddles_hints(grid, lvl, special_tiles):
+def place_riddles_hints(grid, lvl, special_tiles,
+                        PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                                   if tile["name"] == "PATH"), None),
+                        EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                    tile["name"] == "EMPTY"), None),
+                        HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     tile["name"] == "HIDDEN"), None), grid_size=100):
+    tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
+
     for riddle_hint_key, riddle_hint_data in special_tiles.items():
         if "other_name" in riddle_hint_data:
             other_name = riddle_hint_data["other_name"]
@@ -579,14 +587,89 @@ def place_riddles_hints(grid, lvl, special_tiles):
             if re.search("Riddles", other_name) and riddle_hint_data["type_event"] == "Market/Other":
                 coords = riddle_hint_data["coord"]
                 for coord in coords:
-                    wy, wx = coord[1], coord[2]
                     if lvl == coord[0]:
-                        complete_path(grid, wx, wy, "RANDOM")
-                        grid[wx][wy] = next(
-                            (int(key, 16) for key, tile in special_tiles.items() if key == riddle_hint_key), None)
-                        print(color_settings(
-                            f"{riddle_hint_data['name']} Riddle hint: z={lvl}, x={wx}, y={wy}",
-                            bcolors.BLACK, bcolors.BG_ORANGE))
+                        cx, cy = random.choice(tile_positions)
+                        dx, dy = random.randint(-4, 4), random.randint(-4, 4)
+                        nx, ny = cx + dx, cy + dy
+
+                        nx = max(0, min(nx, grid_size - 1))
+                        ny = max(0, min(ny, grid_size - 1))
+                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH,
+                                                                                            HIDDEN]:
+                            complete_path(grid, nx, ny, "RANDOM")
+                            grid[nx][ny] = next(
+                                (int(key, 16) for key, tile in special_tiles.items() if key == riddle_hint_key), None)
+                            print(color_settings(
+                                f"{riddle_hint_data['name']} Riddle hint: z={lvl}, x={nx}, y={ny}",
+                                bcolors.BLACK, bcolors.BG_ORANGE))
+
+
+def place_treasure(grid, lvl, special_tiles,
+                   PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                              if tile["name"] == "PATH"), None),
+                   EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                               tile["name"] == "EMPTY"), None),
+                   HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                tile["name"] == "HIDDEN"), None), grid_size=100):
+    tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
+
+    for treasure_key, treasure_data in special_tiles.items():
+        if "other_name" in treasure_data:
+            other_name = treasure_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Treasure", other_name) and treasure_data["type_event"] == "Market/Other":
+                coords = treasure_data["coord"]
+                for coord in coords:
+                    if lvl == coord[0]:
+                        cx, cy = random.choice(tile_positions)
+                        dx, dy = random.randint(-4, 4), random.randint(-4, 4)
+                        nx, ny = cx + dx, cy + dy
+
+                        nx = max(0, min(nx, grid_size - 1))
+                        ny = max(0, min(ny, grid_size - 1))
+                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH,
+                                                                                            HIDDEN]:
+                            complete_path(grid, nx, ny, "HIDDEN")
+                            grid[nx][ny] = next(
+                                (int(key, 16) for key, tile in special_tiles.items() if key == treasure_key), None)
+                            print(color_settings(
+                                f"{treasure_data['name']} {other_name}: z={lvl}, x={nx}, y={ny}",
+                                bcolors.BLACK, bcolors.BG_YELLOW))
+
+
+def place_shop(grid, lvl, special_tiles,
+               PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                          if tile["name"] == "PATH"), None),
+               EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                           tile["name"] == "EMPTY"), None),
+               HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                            tile["name"] == "HIDDEN"), None), grid_size=100):
+    tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
+
+    for shop_key, shop_data in special_tiles.items():
+        if "other_name" in shop_data and shop_data["type_event"] == "Market/Other":
+            other_name = shop_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if not re.search(r"hint|Treasure|Shrine|Spring|Fountain|Station|Start|Idol", other_name):
+                coords = shop_data["coord"]
+                for coord in coords:
+                    if lvl == coord[0]:
+                        cx, cy = random.choice(tile_positions)
+                        dx, dy = random.randint(-4, 4), random.randint(-4, 4)
+                        nx, ny = cx + dx, cy + dy
+
+                        nx = max(0, min(nx, grid_size - 1))
+                        ny = max(0, min(ny, grid_size - 1))
+                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH,
+                                                                                            HIDDEN]:
+                            complete_path(grid, nx, ny, "RANDOM")
+                            grid[nx][ny] = next(
+                                (int(key, 16) for key, tile in special_tiles.items() if key == shop_key), None)
+                            print(color_settings(
+                                f"{shop_data['name']} {other_name}: z={lvl}, x={nx}, y={ny}",
+                                bcolors.LIGHTORANGE, bcolors.BG_MAGENTA))
 
 
 def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_tiles,
@@ -1024,7 +1107,6 @@ def place_cross(grid, lvl, special_tiles,
                              tile["name"] == "HIDDEN"), None),
                 CROSS=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                             tile["name"] == "CROSS"), None), grid_size=100):
-
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == PATH]
 
     for cross_key, cross_data in special_tiles.items():

@@ -500,6 +500,7 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                                  tile["name"] == "EMPTY"), None),
                      HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                   tile["name"] == "HIDDEN"), None), grid_size=100):
+
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     farthest_positions = sorted(
@@ -508,12 +509,14 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
         reverse=True
     )
 
-    if farthest_positions:
-        for downstairs_key, downstairs_data in special_tiles.items():
-            if downstairs_data["name"] == "01":
-                coords = downstairs_data["coord"]
-                for coord in coords:
-                    if lvl == coord[0]:
+    placed = False
+
+    for downstairs_key, downstairs_data in special_tiles.items():
+        if downstairs_data["name"] == "01":
+            coords = downstairs_data["coord"]
+            for coord in coords:
+                if lvl == coord[0]:
+                    if farthest_positions:
                         cx, cy = farthest_positions[0]
                         dx, dy = random.randint(-4, 4), random.randint(-4, 4)
                         nx, ny = cx + dx, cy + dy
@@ -521,23 +524,47 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                         nx = max(0, min(nx, grid_size - 1))
                         ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in {EMPTY, PATH, HIDDEN}:
                             complete_path(grid, nx, ny, "RANDOM")
                             grid[nx][ny] = next(
                                 (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                  key == downstairs_key), None)
                             print(color_settings(f"01 Downstairs: z={lvl}, x={nx}, y={ny}", bcolors.OKBLUE))
+                            placed = True
+                            break
+                        if placed:
                             break
 
+    if not placed:
+        for downstairs_key, downstairs_data in special_tiles.items():
+            if downstairs_data["name"] == "01":
+                if farthest_positions:
+                    cx, cy = farthest_positions[0]
+                    dx, dy = random.randint(-4, 4), random.randint(-4, 4)
+                    nx, ny = cx + dx, cy + dy
 
-# Place ascending
+                    nx = max(0, min(nx, grid_size - 1))
+                    ny = max(0, min(ny, grid_size - 1))
+
+                    if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in {EMPTY, PATH, HIDDEN}:
+                        complete_path(grid, nx, ny, "RANDOM")
+                        grid[nx][ny] = next(
+                            (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                             key == downstairs_key), None)
+                        print(color_settings(f"01 Downstairs: z={lvl}, x={nx}, y={ny}", bcolors.OKBLUE))
+                        break
+
+
+# Place ASCENDING
 def place_ascending(grid, start_x, start_y, lvl, special_tiles,
-                     PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
-                                if tile["name"] == "PATH"), None),
-                     EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 tile["name"] == "EMPTY"), None),
-                     HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                  tile["name"] == "HIDDEN"), None), grid_size=100):
+                    PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
+                               if tile["name"] == "PATH"), None),
+                    EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                tile["name"] == "EMPTY"), None),
+                    HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                 tile["name"] == "HIDDEN"), None), grid_size=100):
+
+    placed = False
 
     for upstairs_key, upstairs_data in special_tiles.items():
         if upstairs_data["name"] == "02":
@@ -549,7 +576,20 @@ def place_ascending(grid, start_x, start_y, lvl, special_tiles,
                         (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                          key == upstairs_key), None)
                     print(color_settings(f"02 Upstairs: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
+                    placed = True
                     break
+                if placed:
+                    break
+
+    if not placed:
+        for upstairs_key, upstairs_data in special_tiles.items():
+            if upstairs_data["name"] == "02":
+                complete_path(grid, start_x, start_y, "RANDOM")
+                grid[start_x][start_y] = next(
+                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                     key == upstairs_key), None)
+                print(color_settings(f"02 Upstairs: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
+                break
 
 
 def place_wanderers(grid, lvl, wanderers,
@@ -1154,7 +1194,7 @@ def place_cross(grid, lvl, special_tiles,
 
 def cheat_mode(grid, lvl, special_tiles,
                EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                            tile["name"] == "EMPTY"), None), grid_size=100):
+                           tile["name"] == "EMPTY"), None), grid_size=100):
     def find_next_empty(x, y):
         while True:
             if 0 <= x < grid_size and 0 <= y < grid_size and grid[x][y] == EMPTY:
@@ -1169,8 +1209,8 @@ def cheat_mode(grid, lvl, special_tiles,
     x, y = 0, 0
     for cheat_key, cheat_data in special_tiles.items():
         if cheat_data.get("type_event") in ["Movement", "Battle", "Riddles"] or (
-            "other_name" in cheat_data and
-            re.search("Treasure", " ".join(cheat_data["other_name"]))
+                "other_name" in cheat_data and
+                re.search("Treasure", " ".join(cheat_data["other_name"]))
         ):
             x, y = find_next_empty(x, y)
 
@@ -1187,5 +1227,3 @@ def cheat_mode(grid, lvl, special_tiles,
                 ))
 
     complete_path(grid, x // 2, y, "PATH")
-
-

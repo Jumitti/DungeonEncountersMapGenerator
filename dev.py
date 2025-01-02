@@ -42,39 +42,29 @@ PATH = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"]
 HIDDEN = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "HIDDEN"), None)
 CROSS = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "CROSS"), None)
 START_FLOOR_0 = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "00"), None)
-DESCENDING = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "01"), None)
-ASCENDING = next((int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "02"), None)
 two_way_positions = {}
 one_way_positions = {}
 
-if EMPTY is None or PATH is None or HIDDEN is None or START_FLOOR_0 is None or DESCENDING is None or ASCENDING is None:
+if EMPTY is None or PATH is None or HIDDEN is None or START_FLOOR_0 is None:
     raise ValueError(color_settings("The necessary values are not present in the JSON file.", bcolors.FAIL))
 
 
 def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
-    max_iterations = 5
-    max_map_attempts = 5
+    max_iterations = 10
+    max_map_attempts = 10
     map_attempts = 0
 
     # Determine ascending coordinates
     if lvl == 0 or len(maps_data) == 0:
         ascending_coords = (50, 50)
     else:
-        descending_types = [
-            int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "01"
-        ]
-
-        if not descending_types:
-            raise ValueError("No tile with name '01' found in special_tiles.")
-
+        descending_types = [int(key, 16) for key, tile in special_tiles.items() if tile["name"] == "01"]
         previous_grid = maps_data[-1]["grid"]
-
         ascending_coords = None
         for DESCENDING in descending_types:
             ascending_coords = next(
                 ((x, y) for x in range(grid_size) for y in range(grid_size) if previous_grid[x][y] == DESCENDING),
-                None
-            )
+                None)
             if ascending_coords is not None:
                 break
 
@@ -233,4 +223,4 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mod
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=[59, 60, 61], cheat_mode=False)
+    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=[89, 90, 91], cheat_mode=False)

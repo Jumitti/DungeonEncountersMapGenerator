@@ -620,7 +620,7 @@ def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_ti
                                 if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH,
                                                                                                     HIDDEN]:
                                     grid[nx][ny] = next(
-                                        (int(key, 16) for key, tile in special_tiles.items() if tile["name"] == name),
+                                        (int(key, 16) for key, tile in special_tiles.items() if key == two_way_key),
                                         None)
                                     complete_path(grid, nx, ny, "RANDOM")
 
@@ -651,7 +651,7 @@ def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_ti
                                 if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH,
                                                                                                     HIDDEN]:
                                     grid[nx][ny] = next(
-                                        (int(key, 16) for key, tile in special_tiles.items() if tile["name"] == name),
+                                        (int(key, 16) for key, tile in special_tiles.items() if key == one_way_key),
                                         None)
                                     complete_path(grid, nx, ny, "RANDOM")
 
@@ -674,26 +674,30 @@ def place_ability(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for ability_key, ability_data in special_tiles.items():
-        if ability_key in ["0x10103", "0x20103"]:
-            for coord in ability_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in ability_data:
+            other_name = ability_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Ability Station", other_name):
+                for coord in ability_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key in ["0x10103", "0x20103"]), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == ability_key), None)
 
-                            print(color_settings(
-                                f"{ability_data['name']} Ability station: z={lvl}, x={nx}, y={ny}", bcolors.PINK))
-                            break
+                                print(color_settings(
+                                    f"{ability_data['name']} Ability station: z={lvl}, x={nx}, y={ny}", bcolors.PINK))
+                                break
 
 
 def place_adventures(grid, lvl, special_tiles,
@@ -706,27 +710,31 @@ def place_adventures(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for adventures_key, adventures_data in special_tiles.items():
-        if adventures_key in ["0x10104", "0x20104"]:
-            for coord in adventures_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in adventures_data:
+            other_name = adventures_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Adventurer's Rest", other_name):
+                for coord in adventures_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key in ["0x10104", "0x20104"]), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == adventures_key), None)
 
-                            print(color_settings(
-                                f"{adventures_data['name']} Adventure's Rest: z={lvl}, x={nx}, y={ny}",
-                                bcolors.LIGHTPINK))
-                            break
+                                print(color_settings(
+                                    f"{adventures_data['name']} Adventure's Rest: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.LIGHTPINK))
+                                break
 
 
 def place_resurrection(grid, lvl, special_tiles,
@@ -739,27 +747,31 @@ def place_resurrection(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for resurrection_key, resurrection_data in special_tiles.items():
-        if resurrection_key in ["0x10105", "0x20105"]:
-            for coord in resurrection_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in resurrection_data:
+            other_name = resurrection_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Resurrection Shrine", other_name):
+                for coord in resurrection_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key in ["0x10105", "0x20105"]), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == resurrection_key), None)
 
-                            print(color_settings(
-                                f"{resurrection_data['name']} Resurrection Shrine: z={lvl}, x={nx}, y={ny}",
-                                bcolors.BLACK, bcolors.BG_PINK))
-                            break
+                                print(color_settings(
+                                    f"{resurrection_data['name']} Resurrection Shrine: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.BLACK, bcolors.BG_PINK))
+                                break
 
 
 def place_healing(grid, lvl, special_tiles,
@@ -772,27 +784,31 @@ def place_healing(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for healing_key, healing_data in special_tiles.items():
-        if healing_key in ["0x10106", "0x20106"]:
-            for coord in healing_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in healing_data:
+            other_name = healing_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Healing Fountain", other_name):
+                for coord in healing_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key in ["0x10106", "0x20106"]), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == healing_key), None)
 
-                            print(color_settings(
-                                f"{healing_data['name']} Healing Fountain: z={lvl}, x={nx}, y={ny}",
-                                bcolors.BLACK, bcolors.BG_GREEN))
-                            break
+                                print(color_settings(
+                                    f"{healing_data['name']} Healing Fountain: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.BLACK, bcolors.BG_GREEN))
+                                break
 
 
 def place_purification(grid, lvl, special_tiles,
@@ -805,27 +821,31 @@ def place_purification(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for purification_key, purification_data in special_tiles.items():
-        if purification_key in ["0x10107", "0x20107"]:
-            for coord in purification_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in purification_data:
+            other_name = purification_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Purification Spring", other_name):
+                for coord in purification_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key in ["0x10107", "0x20107"]), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == purification_key), None)
 
-                            print(color_settings(
-                                f"{purification_data['name']} Purification Spring: z={lvl}, x={nx}, y={ny}",
-                                bcolors.WHITE, bcolors.BG_WHITE))
-                            break
+                                print(color_settings(
+                                    f"{purification_data['name']} Purification Spring: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.WHITE, bcolors.BG_WHITE))
+                                break
 
 
 def place_gorgon(grid, lvl, special_tiles,
@@ -838,27 +858,31 @@ def place_gorgon(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for gorgon_key, gorgon_data in special_tiles.items():
-        if gorgon_key == "0x10108":
-            for coord in gorgon_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in gorgon_data:
+            other_name = gorgon_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Gorgon Altar", other_name):
+                for coord in gorgon_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "RANDOM")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key == "0x10108"), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "RANDOM")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == gorgon_key), None)
 
-                            print(color_settings(
-                                f"{gorgon_data['name']} Gorgon Altar: z={lvl}, x={nx}, y={ny}",
-                                bcolors.BLACK, bcolors.BG_BLUE))
-                            break
+                                print(color_settings(
+                                    f"{gorgon_data['name']} Gorgon Altar: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.BLACK, bcolors.BG_BLUE))
+                                break
 
 
 def place_cavy(grid, lvl, special_tiles,
@@ -871,27 +895,31 @@ def place_cavy(grid, lvl, special_tiles,
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     for cavy_key, cavy_data in special_tiles.items():
-        if cavy_data.get("other_name") == "Cavy Idol":
-            for coord in cavy_data["coord"]:
-                if lvl == coord[0]:
-                    while True:
-                        cx, cy = random.choice(tile_positions)
-                        dx, dy = random.randint(-2, 2), random.randint(-2, 2)
-                        nx, ny = cx + dx, cy + dy
+        if "other_name" in cavy_data:
+            other_name = cavy_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Cavy Idol", other_name):
+                for coord in cavy_data["coord"]:
+                    if lvl == coord[0]:
+                        while True:
+                            cx, cy = random.choice(tile_positions)
+                            dx, dy = random.randint(-2, 2), random.randint(-2, 2)
+                            nx, ny = cx + dx, cy + dy
 
-                        nx = max(0, min(nx, grid_size - 1))
-                        ny = max(0, min(ny, grid_size - 1))
+                            nx = max(0, min(nx, grid_size - 1))
+                            ny = max(0, min(ny, grid_size - 1))
 
-                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                            complete_path(grid, nx, ny, "HIDDEN")
-                            grid[nx][ny] = next(
-                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key == cavy_key), None)
+                            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                                complete_path(grid, nx, ny, "HIDDEN")
+                                grid[nx][ny] = next(
+                                    (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                     key == cavy_key), None)
 
-                            print(color_settings(
-                                f"{cavy_data['name']} Cavy Idol: z={lvl}, x={nx}, y={ny}",
-                                bcolors.BLACK, bcolors.BG_CYAN))
-                            break
+                                print(color_settings(
+                                    f"{cavy_data['name']} Cavy Idol: z={lvl}, x={nx}, y={ny}",
+                                    bcolors.BLACK, bcolors.BG_CYAN))
+                                break
 
 
 def place_note(grid, lvl, special_tiles,
@@ -985,18 +1013,6 @@ def place_battle(grid, lvl, special_tiles,
                         print(color_settings(
                             f"{battle_data['name']} Battle ability: z={lvl}, x={nx}, y={ny}",
                             bcolors.BLACK, bcolors.BG_GRAY))
-
-
-def place_notable_location(grid, lvl, special_tiles,
-                           PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
-                                      if tile["name"] == "PATH"), None),
-                           EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                       tile["name"] == "EMPTY"), None),
-                           HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                        tile["name"] == "HIDDEN"), None),
-                           CROSS=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                       tile["name"] == "CROSS"), None), grid_size=100):
-    print("TEST")
 
 
 def place_cross(grid, lvl, special_tiles,

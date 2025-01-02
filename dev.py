@@ -207,4 +207,4 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None):
 
 
 if __name__ == "__main__":
-    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[0, 3])
+    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[0, 97])

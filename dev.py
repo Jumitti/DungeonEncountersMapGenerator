@@ -82,9 +82,11 @@ def generate_floor_data(lvl, maps_data=None):
 
         DE.place_wanderers(grid, lvl, wanderers)
 
-        DE.place_descending(grid, start_x, start_y, lvl)
+        DE.place_descending(grid, start_x, start_y, lvl, special_tiles)
 
         DE.place_riddles(grid, lvl, special_tiles)
+
+        DE.place_riddles_hints(grid, lvl, special_tiles)
 
         DE.place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_tiles)
 
@@ -205,4 +207,4 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None):
 
 
 if __name__ == "__main__":
-    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[8])
+    run(nb_lvl=93, maze_type="shuffle", generate_bin=False, one_lvl=[0, 3])

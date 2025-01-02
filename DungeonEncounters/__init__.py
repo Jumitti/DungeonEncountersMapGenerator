@@ -495,15 +495,15 @@ def refine_map(grid, case_type="RANDOM",
                                 grid[x + 1][y] = target_case
 
 
-def place_descending(grid, start_x, start_y, lvl,
+# Place DOWNSTAIRS (need to investigate why there are 0x10101 and 0x20101)
+def place_descending(grid, start_x, start_y, lvl, special_tiles,
                      PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
                                 if tile["name"] == "PATH"), None),
                      EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                  tile["name"] == "EMPTY"), None),
                      HIDDEN=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                  tile["name"] == "HIDDEN"), None),
-                     DESCENDING=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                      tile["name"] == "01"), None), grid_size=100):
+                                  tile["name"] == "HIDDEN"), None), grid_size=100):
+
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
     farthest_positions = sorted(
@@ -513,25 +513,31 @@ def place_descending(grid, start_x, start_y, lvl,
     )
 
     if farthest_positions:
-        while True:
-            cx, cy = farthest_positions[0]
-            dx, dy = random.randint(-4, 4), random.randint(-4, 4)
-            nx, ny = cx + dx, cy + dy
+        for downstairs_key, downstairs_data in special_tiles.items():
+            if downstairs_data["name"] == "01":
+                coords = downstairs_data["coord"]
+                for coord in coords:
+                    if lvl == coord[0]:
+                        cx, cy = farthest_positions[0]
+                        dx, dy = random.randint(-4, 4), random.randint(-4, 4)
+                        nx, ny = cx + dx, cy + dy
 
-            nx = max(0, min(nx, grid_size - 1))
-            ny = max(0, min(ny, grid_size - 1))
+                        nx = max(0, min(nx, grid_size - 1))
+                        ny = max(0, min(ny, grid_size - 1))
 
-            if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
-                complete_path(grid, nx, ny, "RANDOM")
-                grid[nx][ny] = DESCENDING
-                print(color_settings(f"01 Downstairs: z={lvl}, x={start_x}, y={start_y}", bcolors.OKBLUE))
-                break
+                        if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in [EMPTY, PATH, HIDDEN]:
+                            complete_path(grid, nx, ny, "RANDOM")
+                            grid[nx][ny] = next(
+                                (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
+                                 key == downstairs_key), None)
+                            print(color_settings(f"01 Downstairs: z={lvl}, x={nx}, y={ny}", bcolors.OKBLUE))
+                            break
 
 
 def place_wanderers(grid, lvl, wanderers,
                     PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items()
                                if tile["name"] == "PATH"), None)):
-    for wanderer_name, wanderer_data in wanderers.items():
+    for wanderer_key, wanderer_data in wanderers.items():
         coords = wanderer_data["coord"]
         for coord in coords:
             wy, wx = coord[1], coord[2]
@@ -545,9 +551,9 @@ def place_wanderers(grid, lvl, wanderers,
 
 def place_riddles(grid, lvl, special_tiles):
     for riddle in ["Map Riddle", "Math Riddle"]:
-        for riddle_name, riddle_data in special_tiles.items():
+        for riddle_key, riddle_data in special_tiles.items():
             if "other_name" in riddle_data:
-                name, other_name = riddle_data["name"], riddle_data["other_name"]
+                other_name = riddle_data["other_name"]
                 if isinstance(other_name, list):
                     other_name = " ".join(other_name)
                 if re.search(riddle, other_name):
@@ -558,10 +564,29 @@ def place_riddles(grid, lvl, special_tiles):
                         if lvl == coord[0]:
                             complete_path(grid, wx, wy, "RANDOM")
                             grid[wx][wy] = next(
-                                (int(key, 16) for key, tile in special_tiles.items() if key == riddle_name), None)
+                                (int(key, 16) for key, tile in special_tiles.items() if key == riddle_key), None)
                             print(color_settings(
                                 f"{riddle_data['name']} {riddle}: z={lvl}, x={wx}, y={wy}",
                                 bcolors.ORANGE if riddle == "Map Riddle" else bcolors.LIGHTORANGE))
+
+
+def place_riddles_hints(grid, lvl, special_tiles):
+    for riddle_hint_key, riddle_hint_data in special_tiles.items():
+        if "other_name" in riddle_hint_data:
+            other_name = riddle_hint_data["other_name"]
+            if isinstance(other_name, list):
+                other_name = " ".join(other_name)
+            if re.search("Riddles", other_name) and riddle_hint_data["type_event"] == "Market/Other":
+                coords = riddle_hint_data["coord"]
+                for coord in coords:
+                    wy, wx = coord[1], coord[2]
+                    if lvl == coord[0]:
+                        complete_path(grid, wx, wy, "RANDOM")
+                        grid[wx][wy] = next(
+                            (int(key, 16) for key, tile in special_tiles.items() if key == riddle_hint_key), None)
+                        print(color_settings(
+                            f"{riddle_hint_data['name']} Riddle hint: z={lvl}, x={wx}, y={wy}",
+                            bcolors.BLACK, bcolors.BG_ORANGE))
 
 
 def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_tiles,
@@ -573,7 +598,7 @@ def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_ti
                                   tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
     for k in range(1, 11):
-        for two_way_name, two_way_data in special_tiles.items():
+        for two_way_key, two_way_data in special_tiles.items():
             if "other_name" in two_way_data:
                 name, other_name = two_way_data["name"], two_way_data["other_name"]
                 if re.search(rf"\bTwo-way Teleporter {k}\b", " ".join(other_name)):
@@ -608,7 +633,7 @@ def place_teleporter(grid, lvl, two_way_positions, one_way_positions, special_ti
                                     break
 
     for k in range(1, 4):
-        for one_way_name, one_way_data in special_tiles.items():
+        for one_way_key, one_way_data in special_tiles.items():
             if "other_name" in one_way_data:
                 name, other_name = one_way_data["name"], one_way_data["other_name"]
                 if re.search(rf"One-way Teleporter {k}", " ".join(other_name)):
@@ -648,8 +673,8 @@ def place_ability(grid, lvl, special_tiles,
                                tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for ability_name, ability_data in special_tiles.items():
-        if ability_name in ["0x10103", "0x20103"]:
+    for ability_key, ability_data in special_tiles.items():
+        if ability_key in ["0x10103", "0x20103"]:
             for coord in ability_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -680,8 +705,8 @@ def place_adventures(grid, lvl, special_tiles,
                                   tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for adventures_name, adventures_data in special_tiles.items():
-        if adventures_name in ["0x10104", "0x20104"]:
+    for adventures_key, adventures_data in special_tiles.items():
+        if adventures_key in ["0x10104", "0x20104"]:
             for coord in adventures_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -713,8 +738,8 @@ def place_resurrection(grid, lvl, special_tiles,
                                     tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for resurrection_name, resurrection_data in special_tiles.items():
-        if resurrection_name in ["0x10105", "0x20105"]:
+    for resurrection_key, resurrection_data in special_tiles.items():
+        if resurrection_key in ["0x10105", "0x20105"]:
             for coord in resurrection_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -746,8 +771,8 @@ def place_healing(grid, lvl, special_tiles,
                                tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for healing_name, healing_data in special_tiles.items():
-        if healing_name in ["0x10106", "0x20106"]:
+    for healing_key, healing_data in special_tiles.items():
+        if healing_key in ["0x10106", "0x20106"]:
             for coord in healing_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -779,8 +804,8 @@ def place_purification(grid, lvl, special_tiles,
                                     tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for purification_name, purification_data in special_tiles.items():
-        if purification_name in ["0x10107", "0x20107"]:
+    for purification_key, purification_data in special_tiles.items():
+        if purification_key in ["0x10107", "0x20107"]:
             for coord in purification_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -812,8 +837,8 @@ def place_gorgon(grid, lvl, special_tiles,
                               tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for gorgon_name, gorgon_data in special_tiles.items():
-        if gorgon_name == "0x10108":
+    for gorgon_key, gorgon_data in special_tiles.items():
+        if gorgon_key == "0x10108":
             for coord in gorgon_data["coord"]:
                 if lvl == coord[0]:
                     while True:
@@ -845,7 +870,7 @@ def place_cavy(grid, lvl, special_tiles,
                             tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for cavy_name, cavy_data in special_tiles.items():
+    for cavy_key, cavy_data in special_tiles.items():
         if cavy_data.get("other_name") == "Cavy Idol":
             for coord in cavy_data["coord"]:
                 if lvl == coord[0]:
@@ -861,7 +886,7 @@ def place_cavy(grid, lvl, special_tiles,
                             complete_path(grid, nx, ny, "HIDDEN")
                             grid[nx][ny] = next(
                                 (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 key == cavy_name), None)
+                                 key == cavy_key), None)
 
                             print(color_settings(
                                 f"{cavy_data['name']} Cavy Idol: z={lvl}, x={nx}, y={ny}",
@@ -878,7 +903,7 @@ def place_note(grid, lvl, special_tiles,
                             tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for note_name, note_data in special_tiles.items():
+    for note_key, note_data in special_tiles.items():
         if note_data.get("type_event") == "Notes":
             for coord in note_data.get("coord", []):
                 if lvl == coord[0]:
@@ -909,7 +934,7 @@ def place_movement(grid, lvl, special_tiles,
                                 tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for movement_name, movement_data in special_tiles.items():
+    for movement_key, movement_data in special_tiles.items():
         if movement_data.get("type_event") == "Movement":
             for coord in movement_data.get("coord", []):
                 if lvl == coord[0]:
@@ -940,7 +965,7 @@ def place_battle(grid, lvl, special_tiles,
                               tile["name"] == "HIDDEN"), None), grid_size=100):
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] in {PATH, HIDDEN}]
 
-    for battle_name, battle_data in special_tiles.items():
+    for battle_key, battle_data in special_tiles.items():
         if battle_data.get("type_event") == "Battle":
             for coord in battle_data.get("coord", []):
                 if lvl == coord[0]:
@@ -986,13 +1011,12 @@ def place_cross(grid, lvl, special_tiles,
 
     tile_positions = [(x, y) for x in range(grid_size) for y in range(grid_size) if grid[x][y] == PATH]
 
-    for cross_name, cross_data in special_tiles.items():
+    for cross_key, cross_data in special_tiles.items():
         if cross_data["name"] == "CROSS":
             for coord in cross_data["coord"]:
                 if lvl == coord[0]:
                     while True:
                         cx, cy = random.choice(tile_positions)
-
                         if 0 <= cx < grid_size and 0 <= cy < grid_size and grid[cx][cy] == PATH:
                             directions = [
                                 (-1, 0), (1, 0), (0, -1), (0, 1),

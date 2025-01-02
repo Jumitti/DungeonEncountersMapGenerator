@@ -79970,7 +79970,11 @@
             82,
             138,
             158
-        ]
+        ],
+        "other_name": [
+            "The Imp's Shields and Cloaks"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10115": {
         "name": "15",
@@ -80015,7 +80019,11 @@
             99,
             66,
             194
-        ]
+        ],
+        "other_name": [
+            "The Wizard's Incantations"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10117": {
         "name": "17",
@@ -80060,7 +80068,11 @@
             210,
             184,
             212
-        ]
+        ],
+        "other_name": [
+            "The Mummy's Garments"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10116": {
         "name": "16",
@@ -80105,7 +80117,11 @@
             182,
             48,
             45
-        ]
+        ],
+        "other_name": [
+            "The Skeleton's Defense"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1010b": {
         "name": "0b",
@@ -80128,7 +80144,8 @@
         ],
         "other_name": [
             "0B - Two-way Teleporter 2"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1010a": {
         "name": "0a",
@@ -80151,7 +80168,8 @@
         ],
         "other_name": [
             "0A - Two-way Teleporter 1"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1010c": {
         "name": "0c",
@@ -80174,7 +80192,8 @@
         ],
         "other_name": [
             "0C - Two-way Teleporter 3"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10103": {
         "name": "03",
@@ -80369,7 +80388,11 @@
             133,
             30,
             57
-        ]
+        ],
+        "other_name": [
+            "Ability Station"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10114": {
         "name": "14",
@@ -80414,7 +80437,11 @@
             185,
             166,
             63
-        ]
+        ],
+        "other_name": [
+            "The Chimera's Arms"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1010e": {
         "name": "0e",
@@ -80437,7 +80464,8 @@
         ],
         "other_name": [
             "0E - Two-way Teleporter 5"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1010d": {
         "name": "0d",
@@ -80460,7 +80488,8 @@
         ],
         "other_name": [
             "0D - Two-way Teleporter 4"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10100": {
         "name": "00",
@@ -80475,7 +80504,11 @@
             146,
             202,
             19
-        ]
+        ],
+        "other_name": [
+            "Start"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1010f": {
         "name": "0f",
@@ -80493,7 +80526,8 @@
         ],
         "other_name": [
             "0F - Two-way Teleporter 6"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10104": {
         "name": "04",
@@ -80625,8 +80659,9 @@
             142
         ],
         "other_name": [
-            "TOWN"
-        ]
+            "TOWN", "Adventurer's Rest"
+        ],
+        "type_event": "Exits"
     },
     "0x10105": {
         "name": "05",
@@ -80826,7 +80861,11 @@
             57,
             132,
             158
-        ]
+        ],
+        "other_name": [
+            "Resurrection Shrine"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10106": {
         "name": "06",
@@ -80986,7 +81025,11 @@
             111,
             137,
             197
-        ]
+        ],
+        "other_name": [
+            "Healing Fontain"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10107": {
         "name": "07",
@@ -81071,7 +81114,11 @@
             130,
             123,
             38
-        ]
+        ],
+        "other_name": [
+            "Purification Spring"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10113": {
         "name": "13",
@@ -81094,7 +81141,8 @@
         ],
         "other_name": [
             "13 - Two-way Teleporter 10"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10110": {
         "name": "10",
@@ -81112,7 +81160,8 @@
         ],
         "other_name": [
             "10 - Two-way Teleporter 7"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10112": {
         "name": "12",
@@ -81135,7 +81184,8 @@
         ],
         "other_name": [
             "12 - Two-way Teleporter 9"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10111": {
         "name": "11",
@@ -81158,7 +81208,8 @@
         ],
         "other_name": [
             "11 - Two-way Teleporter 8"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10101": {
         "name": "01",
@@ -81726,7 +81777,8 @@
         ],
         "other_name": [
             "01 - DOWN"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10199": {
         "name": "99",
@@ -81744,7 +81796,8 @@
         ],
         "other_name": [
             "Wild Boar"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10198": {
         "name": "98",
@@ -81762,7 +81815,8 @@
         ],
         "other_name": [
             "Ghost"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10102": {
         "name": "02",
@@ -82346,7 +82400,8 @@
         "other_name": [
             "02 - UP",
             "01 - DOWN"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10171": {
         "name": "71",
@@ -82373,7 +82428,8 @@
         ],
         "ap_cost": [
             3
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10184": {
         "name": "84",
@@ -82397,7 +82453,8 @@
         ],
         "ap_cost": [
             2
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x1019b": {
         "name": "9b",
@@ -82415,7 +82472,8 @@
         ],
         "other_name": [
             "Skeleton"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1019a": {
         "name": "9a",
@@ -82433,7 +82491,8 @@
         ],
         "other_name": [
             "Killer Mantis"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10120": {
         "name": "20",
@@ -82448,7 +82507,11 @@
             2,
             173,
             58
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1019d": {
         "name": "9d",
@@ -82466,7 +82529,8 @@
         ],
         "other_name": [
             "Lamia"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1019c": {
         "name": "9c",
@@ -82484,7 +82548,8 @@
         ],
         "other_name": [
             "Aquaweed"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1019f": {
         "name": "9f",
@@ -82502,7 +82567,8 @@
         ],
         "other_name": [
             "Gargoyle"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10160": {
         "name": "60",
@@ -82522,7 +82588,11 @@
             221,
             112,
             176
-        ]
+        ],
+        "other_name": [
+            "Treasure 1"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1019e": {
         "name": "9e",
@@ -82540,7 +82610,8 @@
         ],
         "other_name": [
             "Hellhound"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101a0": {
         "name": "a0",
@@ -82558,7 +82629,8 @@
         ],
         "other_name": [
             "Alligator"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10172": {
         "name": "72",
@@ -82585,7 +82657,8 @@
         ],
         "ap_cost": [
             4
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10187": {
         "name": "87",
@@ -82612,7 +82685,8 @@
         ],
         "ap_cost": [
             8
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101a1": {
         "name": "a1",
@@ -82630,7 +82704,8 @@
         ],
         "other_name": [
             "Wizard"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10140": {
         "name": "40",
@@ -82651,7 +82726,8 @@
         ],
         "description": [
             "Powder Gun"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101a3": {
         "name": "a3",
@@ -82669,7 +82745,8 @@
         ],
         "other_name": [
             "Shark"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10185": {
         "name": "85",
@@ -82696,7 +82773,8 @@
         ],
         "ap_cost": [
             5
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101a2": {
         "name": "a2",
@@ -82714,7 +82792,8 @@
         ],
         "other_name": [
             "Sculpture"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10108": {
         "name": "08",
@@ -82779,7 +82858,11 @@
             66,
             116,
             26
-        ]
+        ],
+        "other_name": [
+            "Gorgon Altar"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101a4": {
         "name": "a4",
@@ -82797,7 +82880,8 @@
         ],
         "other_name": [
             "Black Bear"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10173": {
         "name": "73",
@@ -82824,7 +82908,8 @@
         ],
         "ap_cost": [
             5
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101a5": {
         "name": "a5",
@@ -82842,7 +82927,8 @@
         ],
         "other_name": [
             "Destroyer"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10150": {
         "name": "50",
@@ -82863,7 +82949,8 @@
         ],
         "description": [
             "Ancient Mirror"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101a7": {
         "name": "a7",
@@ -82881,7 +82968,8 @@
         ],
         "other_name": [
             "Fafnir"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10130": {
         "name": "30",
@@ -82896,7 +82984,11 @@
             255,
             221,
             44
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101a6": {
         "name": "a6",
@@ -82914,7 +83006,8 @@
         ],
         "other_name": [
             "Golem"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1018c": {
         "name": "8c",
@@ -82941,7 +83034,8 @@
         ],
         "ap_cost": [
             7
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101f0": {
         "name": "f0",
@@ -82959,7 +83053,8 @@
         ],
         "other_name": [
             "Treasure Hunter"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101a9": {
         "name": "a9",
@@ -82977,7 +83072,8 @@
         ],
         "other_name": [
             "Amoeba"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101a8": {
         "name": "a8",
@@ -82995,7 +83091,8 @@
         ],
         "other_name": [
             "Devilshrub"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10170": {
         "name": "70",
@@ -83022,7 +83119,8 @@
         ],
         "ap_cost": [
             5
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10131": {
         "name": "31",
@@ -83037,7 +83135,11 @@
             58,
             240,
             160
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10141": {
         "name": "41",
@@ -83058,7 +83160,8 @@
         ],
         "description": [
             "Exquisite Timepiece"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101aa": {
         "name": "aa",
@@ -83076,7 +83179,8 @@
         ],
         "other_name": [
             "Satyr"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ab": {
         "name": "ab",
@@ -83094,7 +83198,8 @@
         ],
         "other_name": [
             "Imp"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10119": {
         "name": "19",
@@ -83124,7 +83229,11 @@
             34,
             241,
             131
-        ]
+        ],
+        "other_name": [
+            "The Sculpture's Jewelry"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1011a": {
         "name": "1a",
@@ -83154,7 +83263,11 @@
             186,
             206,
             87
-        ]
+        ],
+        "other_name": [
+            "The Horror Hand's Boots"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101ac": {
         "name": "ac",
@@ -83172,7 +83285,8 @@
         ],
         "other_name": [
             "Tarantula"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ad": {
         "name": "ad",
@@ -83190,7 +83304,8 @@
         ],
         "other_name": [
             "Sea-devil"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1011b": {
         "name": "1b",
@@ -83223,7 +83338,8 @@
         ],
         "other_name": [
             "1B - The Gargoyle's Firearms"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x101af": {
         "name": "af",
@@ -83241,7 +83357,8 @@
         ],
         "other_name": [
             "Killer Fungus"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ae": {
         "name": "ae",
@@ -83259,7 +83376,8 @@
         ],
         "other_name": [
             "Monk"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101b0": {
         "name": "b0",
@@ -83277,7 +83395,8 @@
         ],
         "other_name": [
             "Armored Warrior"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1014b": {
         "name": "4b",
@@ -83298,7 +83417,8 @@
         ],
         "description": [
             "Excavator"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x1018d": {
         "name": "8d",
@@ -83325,7 +83445,8 @@
         ],
         "ap_cost": [
             13
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10121": {
         "name": "21",
@@ -83340,7 +83461,11 @@
             131,
             54,
             77
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10161": {
         "name": "61",
@@ -83355,7 +83480,11 @@
             104,
             206,
             147
-        ]
+        ],
+        "other_name": [
+            "Treasure 2"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101b1": {
         "name": "b1",
@@ -83373,7 +83502,8 @@
         ],
         "other_name": [
             "Vampire Bats"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10177": {
         "name": "77",
@@ -83400,7 +83530,8 @@
         ],
         "ap_cost": [
             6
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101b3": {
         "name": "b3",
@@ -83418,7 +83549,8 @@
         ],
         "other_name": [
             "Killer Bees"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101b2": {
         "name": "b2",
@@ -83436,7 +83568,8 @@
         ],
         "other_name": [
             "Zombie"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10151": {
         "name": "51",
@@ -83457,7 +83590,8 @@
         ],
         "description": [
             "Cutlery Set"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101b5": {
         "name": "b5",
@@ -83475,7 +83609,8 @@
         ],
         "other_name": [
             "Iron Giant"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101b4": {
         "name": "b4",
@@ -83493,7 +83628,8 @@
         ],
         "other_name": [
             "Killer Tome"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1018f": {
         "name": "8f",
@@ -83520,7 +83656,8 @@
         ],
         "ap_cost": [
             14
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101b7": {
         "name": "b7",
@@ -83538,7 +83675,8 @@
         ],
         "other_name": [
             "Cockatrice"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10186": {
         "name": "86",
@@ -83565,7 +83703,8 @@
         ],
         "ap_cost": [
             6
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10132": {
         "name": "32",
@@ -83580,7 +83719,11 @@
             49,
             12,
             44
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101b6": {
         "name": "b6",
@@ -83598,7 +83741,8 @@
         ],
         "other_name": [
             "Clock Tower"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101b8": {
         "name": "b8",
@@ -83616,7 +83760,8 @@
         ],
         "other_name": [
             "Werewolf"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101b9": {
         "name": "b9",
@@ -83634,7 +83779,8 @@
         ],
         "other_name": [
             "Anaconda"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10175": {
         "name": "75",
@@ -83658,7 +83804,8 @@
         ],
         "ap_cost": [
             8
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101ba": {
         "name": "ba",
@@ -83676,7 +83823,8 @@
         ],
         "other_name": [
             "Witch"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101bb": {
         "name": "bb",
@@ -83694,7 +83842,8 @@
         ],
         "other_name": [
             "Stalker"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10189": {
         "name": "89",
@@ -83721,7 +83870,8 @@
         ],
         "ap_cost": [
             15
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101bc": {
         "name": "bc",
@@ -83739,7 +83889,8 @@
         ],
         "other_name": [
             "Devilcat"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1018a": {
         "name": "8a",
@@ -83766,7 +83917,8 @@
         ],
         "ap_cost": [
             13
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10122": {
         "name": "22",
@@ -83781,7 +83933,11 @@
             233,
             218,
             199
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101be": {
         "name": "be",
@@ -83799,7 +83955,8 @@
         ],
         "other_name": [
             "Crawler"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101bd": {
         "name": "bd",
@@ -83817,7 +83974,8 @@
         ],
         "other_name": [
             "Worm"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101bf": {
         "name": "bf",
@@ -83835,7 +83993,8 @@
         ],
         "other_name": [
             "Mummy"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10176": {
         "name": "76",
@@ -83862,7 +84021,8 @@
         ],
         "ap_cost": [
             10
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101c0": {
         "name": "c0",
@@ -83880,7 +84040,8 @@
         ],
         "other_name": [
             "Horror Hands"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101c2": {
         "name": "c2",
@@ -83898,7 +84059,8 @@
         ],
         "other_name": [
             "Killer Chair"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101c1": {
         "name": "c1",
@@ -83916,7 +84078,8 @@
         ],
         "other_name": [
             "Lamia Toad"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10152": {
         "name": "52",
@@ -83937,7 +84100,8 @@
         ],
         "description": [
             "Shuriken"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10194": {
         "name": "94",
@@ -83964,7 +84128,8 @@
         ],
         "ap_cost": [
             14
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10142": {
         "name": "42",
@@ -83985,7 +84150,8 @@
         ],
         "description": [
             "Otherworldly Urn"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101c3": {
         "name": "c3",
@@ -84003,7 +84169,8 @@
         ],
         "other_name": [
             "Basilisk"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10162": {
         "name": "62",
@@ -84023,7 +84190,11 @@
             113,
             239,
             52
-        ]
+        ],
+        "other_name": [
+            "Treasure 3"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101c4": {
         "name": "c4",
@@ -84041,7 +84212,8 @@
         ],
         "other_name": [
             "Maneater"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101c6": {
         "name": "c6",
@@ -84059,7 +84231,8 @@
         ],
         "other_name": [
             "Chimera"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101c5": {
         "name": "c5",
@@ -84077,7 +84250,8 @@
         ],
         "other_name": [
             "Scorpion"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1017e": {
         "name": "7e",
@@ -84104,7 +84278,8 @@
         ],
         "ap_cost": [
             9
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101c7": {
         "name": "c7",
@@ -84122,7 +84297,8 @@
         ],
         "other_name": [
             "Bone Dragon"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10133": {
         "name": "33",
@@ -84137,7 +84313,11 @@
             215,
             48,
             233
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10145": {
         "name": "45",
@@ -84158,7 +84338,8 @@
         ],
         "description": [
             "Gastrophetes"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x20188": {
         "name": "88",
@@ -84185,7 +84366,8 @@
         ],
         "ap_cost": [
             6
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101c8": {
         "name": "c8",
@@ -84203,7 +84385,8 @@
         ],
         "other_name": [
             "Minotaur"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101c9": {
         "name": "c9",
@@ -84221,7 +84404,8 @@
         ],
         "other_name": [
             "Death Tarot"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10163": {
         "name": "63",
@@ -84241,7 +84425,11 @@
             15,
             164,
             192
-        ]
+        ],
+        "other_name": [
+            "Treasure 4"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10144": {
         "name": "44",
@@ -84262,7 +84450,8 @@
         ],
         "description": [
             "De-energizer"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101fb": {
         "name": "fb",
@@ -84280,7 +84469,8 @@
         ],
         "other_name": [
             "Professor Cavy"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1017a": {
         "name": "7a",
@@ -84304,7 +84494,8 @@
         ],
         "ap_cost": [
             10
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10123": {
         "name": "23",
@@ -84319,7 +84510,11 @@
             114,
             72,
             3
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101cb": {
         "name": "cb",
@@ -84337,7 +84532,8 @@
         ],
         "other_name": [
             "Nightmare"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10155": {
         "name": "55",
@@ -84358,7 +84554,8 @@
         ],
         "description": [
             "Painting"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101ca": {
         "name": "ca",
@@ -84376,7 +84573,8 @@
         ],
         "other_name": [
             "Ravenous Flame"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1014e": {
         "name": "4e",
@@ -84397,7 +84595,8 @@
         ],
         "description": [
             "Chirijisayagata"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101cd": {
         "name": "cd",
@@ -84415,7 +84614,8 @@
         ],
         "other_name": [
             "Treant"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1018b": {
         "name": "8b",
@@ -84442,7 +84642,8 @@
         ],
         "ap_cost": [
             9
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101cc": {
         "name": "cc",
@@ -84460,7 +84661,8 @@
         ],
         "other_name": [
             "Tubeworms"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101cf": {
         "name": "cf",
@@ -84478,7 +84680,8 @@
         ],
         "other_name": [
             "Creeping Lava"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ce": {
         "name": "ce",
@@ -84496,7 +84699,8 @@
         ],
         "other_name": [
             "Medusa"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10134": {
         "name": "34",
@@ -84511,7 +84715,11 @@
             64,
             233,
             241
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10174": {
         "name": "74",
@@ -84535,7 +84743,8 @@
         ],
         "ap_cost": [
             16
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101d1": {
         "name": "d1",
@@ -84553,7 +84762,8 @@
         ],
         "other_name": [
             "Energizer"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101d0": {
         "name": "d0",
@@ -84571,7 +84781,8 @@
         ],
         "other_name": [
             "Aevis"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x20153": {
         "name": "53",
@@ -84592,7 +84803,8 @@
         ],
         "description": [
             "Enchanted Shuriken"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10143": {
         "name": "43",
@@ -84613,7 +84825,8 @@
         ],
         "description": [
             "Katana"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10190": {
         "name": "90",
@@ -84640,7 +84853,8 @@
         ],
         "ap_cost": [
             5
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x101d3": {
         "name": "d3",
@@ -84658,7 +84872,8 @@
         ],
         "other_name": [
             "Death Mage"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10164": {
         "name": "64",
@@ -84678,7 +84893,11 @@
             50,
             162,
             171
-        ]
+        ],
+        "other_name": [
+            "Treasure 5"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101d2": {
         "name": "d2",
@@ -84696,7 +84915,8 @@
         ],
         "other_name": [
             "Ogre"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1017d": {
         "name": "7d",
@@ -84723,7 +84943,8 @@
         ],
         "ap_cost": [
             10
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10124": {
         "name": "24",
@@ -84738,7 +84959,11 @@
             108,
             54,
             71
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101d5": {
         "name": "d5",
@@ -84756,7 +84981,8 @@
         ],
         "other_name": [
             "Red Dragon"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101d4": {
         "name": "d4",
@@ -84774,7 +85000,8 @@
         ],
         "other_name": [
             "Waking Eyes"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10146": {
         "name": "46",
@@ -84795,7 +85022,8 @@
         ],
         "description": [
             "Maximillian Helm"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101d6": {
         "name": "d6",
@@ -84813,7 +85041,8 @@
         ],
         "other_name": [
             "Cyber Dragon"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101d7": {
         "name": "d7",
@@ -84831,7 +85060,8 @@
         ],
         "other_name": [
             "Wyvern"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10193": {
         "name": "93",
@@ -84858,7 +85088,8 @@
         ],
         "ap_cost": [
             8
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10154": {
         "name": "54",
@@ -84879,7 +85110,8 @@
         ],
         "description": [
             "Officiant's Staff"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101d8": {
         "name": "d8",
@@ -84897,7 +85129,8 @@
         ],
         "other_name": [
             "Death Gate"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10178": {
         "name": "78",
@@ -84924,7 +85157,8 @@
         ],
         "ap_cost": [
             9
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10135": {
         "name": "35",
@@ -84939,7 +85173,11 @@
             27,
             93,
             86
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10156": {
         "name": "56",
@@ -84960,7 +85198,8 @@
         ],
         "description": [
             "Dragon Scale"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101d9": {
         "name": "d9",
@@ -84978,7 +85217,8 @@
         ],
         "other_name": [
             "Killer Fog"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1017b": {
         "name": "7b",
@@ -85005,7 +85245,8 @@
         ],
         "ap_cost": [
             11
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101da": {
         "name": "da",
@@ -85023,7 +85264,8 @@
         ],
         "other_name": [
             "Samurai"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10196": {
         "name": "96",
@@ -85050,7 +85292,8 @@
         ],
         "ap_cost": [
             12
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10165": {
         "name": "65",
@@ -85070,7 +85313,11 @@
             42,
             210,
             61
-        ]
+        ],
+        "other_name": [
+            "Treasure 6"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10158": {
         "name": "58",
@@ -85091,7 +85338,8 @@
         ],
         "description": [
             "Maximillian Armor"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101db": {
         "name": "db",
@@ -85106,7 +85354,11 @@
             240,
             224,
             16
-        ]
+        ],
+        "other_name": [
+            "Guillotine"
+        ],
+        "type_event": "Notes"
     },
     "0x101dc": {
         "name": "dc",
@@ -85124,7 +85376,8 @@
         ],
         "other_name": [
             "Plague"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1011c": {
         "name": "1c",
@@ -85142,7 +85395,8 @@
         ],
         "other_name": [
             "1C - The Shark's Secret Selection"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10136": {
         "name": "36",
@@ -85157,7 +85411,11 @@
             116,
             147,
             116
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101fc": {
         "name": "fc",
@@ -85175,7 +85433,8 @@
         ],
         "other_name": [
             "FC - One-way Teleporter 1"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1014f": {
         "name": "4f",
@@ -85196,7 +85455,8 @@
         ],
         "description": [
             "Javelin"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101dd": {
         "name": "dd",
@@ -85214,7 +85474,8 @@
         ],
         "other_name": [
             "Melusine"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101de": {
         "name": "de",
@@ -85232,7 +85493,8 @@
         ],
         "other_name": [
             "Raging Tempest"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10191": {
         "name": "91",
@@ -85259,7 +85521,8 @@
         ],
         "ap_cost": [
             17
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10125": {
         "name": "25",
@@ -85274,7 +85537,11 @@
             208,
             71,
             70
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10147": {
         "name": "47",
@@ -85295,7 +85562,8 @@
         ],
         "description": [
             "Crown of Laurels"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101df": {
         "name": "df",
@@ -85313,7 +85581,8 @@
         ],
         "other_name": [
             "Undulating Cloth"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101e0": {
         "name": "e0",
@@ -85331,7 +85600,8 @@
         ],
         "other_name": [
             "Behemoth"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10179": {
         "name": "79",
@@ -85358,7 +85628,8 @@
         ],
         "ap_cost": [
             13
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101e1": {
         "name": "e1",
@@ -85376,7 +85647,8 @@
         ],
         "other_name": [
             "Monolith"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10166": {
         "name": "66",
@@ -85391,7 +85663,11 @@
             133,
             57,
             227
-        ]
+        ],
+        "other_name": [
+            "Treasure 7"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10137": {
         "name": "37",
@@ -85406,10 +85682,14 @@
             99,
             152,
             30
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10200": {
-        "name": "Unknown",
+        "name": "CROSS",
         "coord": [
             [
                 50,
@@ -86026,7 +86306,11 @@
             98,
             205,
             109
-        ]
+        ],
+        "other_name": [
+            "CROSS"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101e2": {
         "name": "e2",
@@ -86044,7 +86328,8 @@
         ],
         "other_name": [
             "Agent"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101e3": {
         "name": "e3",
@@ -86062,7 +86347,8 @@
         ],
         "other_name": [
             "Magnetica"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10167": {
         "name": "67",
@@ -86077,7 +86363,11 @@
             230,
             24,
             132
-        ]
+        ],
+        "other_name": [
+            "Treasure 8"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10126": {
         "name": "26",
@@ -86092,7 +86382,11 @@
             251,
             214,
             99
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2011d": {
         "name": "1d",
@@ -86110,7 +86404,8 @@
         ],
         "other_name": [
             "The Lamia's Potations"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x101e4": {
         "name": "e4",
@@ -86128,7 +86423,8 @@
         ],
         "other_name": [
             "Terraformer"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101e5": {
         "name": "e5",
@@ -86146,7 +86442,8 @@
         ],
         "other_name": [
             "Flying Saucers"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10138": {
         "name": "38",
@@ -86161,7 +86458,11 @@
             5,
             238,
             188
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10157": {
         "name": "57",
@@ -86182,7 +86483,8 @@
         ],
         "description": [
             "Graphene Webbing"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10168": {
         "name": "68",
@@ -86197,7 +86499,11 @@
             223,
             54,
             186
-        ]
+        ],
+        "other_name": [
+            "Treasure 9"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101e6": {
         "name": "e6",
@@ -86215,7 +86521,8 @@
         ],
         "other_name": [
             "Phantom Castle"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1018e": {
         "name": "8e",
@@ -86242,7 +86549,8 @@
         ],
         "ap_cost": [
             20
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x1017c": {
         "name": "7c",
@@ -86269,7 +86577,8 @@
         ],
         "ap_cost": [
             11
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x10148": {
         "name": "48",
@@ -86290,7 +86599,8 @@
         ],
         "description": [
             "Malio 17"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10127": {
         "name": "27",
@@ -86305,7 +86615,11 @@
             64,
             1,
             31
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10180": {
         "name": "80",
@@ -86332,7 +86646,8 @@
         ],
         "ap_cost": [
             7
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x20103": {
         "name": "03",
@@ -86357,7 +86672,11 @@
             59,
             172,
             40
-        ]
+        ],
+        "other_name": [
+            "Ability Station"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10139": {
         "name": "39",
@@ -86372,7 +86691,11 @@
             191,
             115,
             204
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20102": {
         "name": "02",
@@ -86447,7 +86770,11 @@
             117,
             122,
             178
-        ]
+        ],
+        "other_name": [
+            "Ascending Stairs"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20195": {
         "name": "95",
@@ -86474,7 +86801,8 @@
         ],
         "ap_cost": [
             35
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x20116": {
         "name": "16",
@@ -86489,7 +86817,11 @@
             138,
             245,
             211
-        ]
+        ],
+        "other_name": [
+            "The Skeleton's Defense"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20115": {
         "name": "15",
@@ -86504,7 +86836,11 @@
             251,
             236,
             39
-        ]
+        ],
+        "other_name": [
+            "The Wizard's Incantations"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20114": {
         "name": "14",
@@ -86519,7 +86855,11 @@
             39,
             167,
             176
-        ]
+        ],
+        "other_name": [
+            "The Chimera's Arms"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20106": {
         "name": "06",
@@ -86534,7 +86874,11 @@
             15,
             237,
             197
-        ]
+        ],
+        "other_name": [
+            "Healing Fountain"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20117": {
         "name": "17",
@@ -86549,7 +86893,11 @@
             174,
             106,
             245
-        ]
+        ],
+        "other_name": [
+            "The Mummy's Garments"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20118": {
         "name": "18",
@@ -86564,7 +86912,11 @@
             226,
             176,
             179
-        ]
+        ],
+        "other_name": [
+            "The Imp's Shields and Cloaks"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20104": {
         "name": "04",
@@ -86604,7 +86956,11 @@
             56,
             106,
             4
-        ]
+        ],
+        "other_name": [
+            "Adventurer's Rest"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20119": {
         "name": "19",
@@ -86619,7 +86975,11 @@
             145,
             200,
             146
-        ]
+        ],
+        "other_name": [
+            "The Sculpture's Jewelry"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2011a": {
         "name": "1a",
@@ -86634,7 +86994,11 @@
             6,
             46,
             133
-        ]
+        ],
+        "other_name": [
+            "The Horror Hand's Boots"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20105": {
         "name": "05",
@@ -86649,7 +87013,11 @@
             38,
             233,
             70
-        ]
+        ],
+        "other_name": [
+            "Resurrection Shrine"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20149": {
         "name": "49",
@@ -86670,7 +87038,8 @@
         ],
         "description": [
             "Malaflux 17"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x20107": {
         "name": "07",
@@ -86685,7 +87054,11 @@
             194,
             218,
             147
-        ]
+        ],
+        "other_name": [
+            "Purification Spring"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2010f": {
         "name": "0f",
@@ -86703,7 +87076,8 @@
         ],
         "other_name": [
             "0F - Two-way Teleporter 6"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x2011b": {
         "name": "1b",
@@ -86718,7 +87092,11 @@
             96,
             29,
             146
-        ]
+        ],
+        "other_name": [
+            "The Gargoyle's Firearms"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20101": {
         "name": "01",
@@ -86746,7 +87124,8 @@
         ],
         "other_name": [
             "01 - DOWN"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x10159": {
         "name": "59",
@@ -86767,7 +87146,8 @@
         ],
         "description": [
             "Lordly Robes"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101e7": {
         "name": "e7",
@@ -86785,7 +87165,8 @@
         ],
         "other_name": [
             "Ninja"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x2014d": {
         "name": "4d",
@@ -86806,7 +87187,8 @@
         ],
         "description": [
             "Dragon Whisker"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101e8": {
         "name": "e8",
@@ -86824,7 +87206,8 @@
         ],
         "other_name": [
             "Blue Dragon"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x10128": {
         "name": "28",
@@ -86839,7 +87222,11 @@
             109,
             127,
             91
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101e9": {
         "name": "e9",
@@ -86857,7 +87244,8 @@
         ],
         "other_name": [
             "Whirling Waters"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ea": {
         "name": "ea",
@@ -86875,7 +87263,8 @@
         ],
         "other_name": [
             "Kraken"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x2014a": {
         "name": "4a",
@@ -86896,7 +87285,8 @@
         ],
         "description": [
             "Mungsten Gun"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x1013a": {
         "name": "3a",
@@ -86911,7 +87301,11 @@
             247,
             230,
             49
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10197": {
         "name": "97",
@@ -86938,7 +87332,8 @@
         ],
         "ap_cost": [
             15
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x10129": {
         "name": "29",
@@ -86953,7 +87348,11 @@
             20,
             160,
             226
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10169": {
         "name": "69",
@@ -86973,7 +87372,11 @@
             149,
             101,
             62
-        ]
+        ],
+        "other_name": [
+            "Treasure 10"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2015a": {
         "name": "5a",
@@ -86994,7 +87397,8 @@
         ],
         "description": [
             "Meowitzer"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x10192": {
         "name": "92",
@@ -87021,7 +87425,8 @@
         ],
         "ap_cost": [
             23
-        ]
+        ],
+        "type_event": "Battle"
     },
     "0x1013b": {
         "name": "3b",
@@ -87036,7 +87441,11 @@
             43,
             134,
             25
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2015b": {
         "name": "5b",
@@ -87057,7 +87466,8 @@
         ],
         "description": [
             "Cloak Of The Divine"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x2017f": {
         "name": "7f",
@@ -87084,7 +87494,8 @@
         ],
         "ap_cost": [
             21
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x20110": {
         "name": "10",
@@ -87102,7 +87513,8 @@
         ],
         "other_name": [
             "10 - Two-way Teleporter 7"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x101eb": {
         "name": "eb",
@@ -87120,7 +87532,8 @@
         ],
         "other_name": [
             "Spectral Dragon"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1016a": {
         "name": "6a",
@@ -87140,7 +87553,11 @@
             13,
             225,
             140
-        ]
+        ],
+        "other_name": [
+            "Treasure 11"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1016b": {
         "name": "6b",
@@ -87160,7 +87577,11 @@
             186,
             114,
             61
-        ]
+        ],
+        "other_name": [
+            "Treasure 12"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101ec": {
         "name": "ec",
@@ -87178,7 +87599,8 @@
         ],
         "other_name": [
             "Tiamat"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1012a": {
         "name": "2a",
@@ -87193,7 +87615,11 @@
             83,
             147,
             209
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10181": {
         "name": "81",
@@ -87220,7 +87646,8 @@
         ],
         "ap_cost": [
             15
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x1015c": {
         "name": "5c",
@@ -87241,7 +87668,8 @@
         ],
         "description": [
             "Maliare 9"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x1012b": {
         "name": "2b",
@@ -87256,7 +87684,11 @@
             149,
             216,
             13
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1016c": {
         "name": "6c",
@@ -87276,7 +87708,11 @@
             30,
             83,
             215
-        ]
+        ],
+        "other_name": [
+            "Treasure 13"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1014c": {
         "name": "4c",
@@ -87297,7 +87733,8 @@
         ],
         "description": [
             "Tournesol"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x1016d": {
         "name": "6d",
@@ -87312,7 +87749,11 @@
             56,
             29,
             140
-        ]
+        ],
+        "other_name": [
+            "Treasure 14"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1013c": {
         "name": "3c",
@@ -87327,7 +87768,11 @@
             254,
             138,
             51
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1012c": {
         "name": "2c",
@@ -87342,7 +87787,11 @@
             88,
             200,
             119
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101fd": {
         "name": "fd",
@@ -87366,7 +87815,8 @@
         "other_name": [
             "One-way Teleporter 2",
             "FD - One-way Teleporter 2"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1013d": {
         "name": "3d",
@@ -87381,7 +87831,11 @@
             133,
             38,
             32
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1011f": {
         "name": "1f",
@@ -87399,7 +87853,8 @@
         ],
         "other_name": [
             "1F - The Ghost's Goods Exchange"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x101ed": {
         "name": "ed",
@@ -87417,7 +87872,8 @@
         ],
         "other_name": [
             "Leviathan"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ee": {
         "name": "ee",
@@ -87435,7 +87891,8 @@
         ],
         "other_name": [
             "Ghost Ship"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1016e": {
         "name": "6e",
@@ -87450,7 +87907,11 @@
             63,
             224,
             13
-        ]
+        ],
+        "other_name": [
+            "Treasure 15"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101ef": {
         "name": "ef",
@@ -87468,7 +87929,8 @@
         ],
         "other_name": [
             "Betelgeuse"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1012d": {
         "name": "2d",
@@ -87483,7 +87945,11 @@
             255,
             145,
             163
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101f1": {
         "name": "f1",
@@ -87501,7 +87967,8 @@
         ],
         "other_name": [
             "Enthralled Everethe"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101f2": {
         "name": "f2",
@@ -87519,7 +87986,8 @@
         ],
         "other_name": [
             "Panopticoa (1)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101f3": {
         "name": "f3",
@@ -87537,7 +88005,8 @@
         ],
         "other_name": [
             "Panopticoa (2)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1012e": {
         "name": "2e",
@@ -87552,7 +88021,11 @@
             137,
             79,
             56
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20182": {
         "name": "82",
@@ -87579,7 +88052,8 @@
         ],
         "ap_cost": [
             22
-        ]
+        ],
+        "type_event": "Movement"
     },
     "0x101f4": {
         "name": "f4",
@@ -87597,7 +88071,8 @@
         ],
         "other_name": [
             "Panopticoa (3)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x1015d": {
         "name": "5d",
@@ -87618,7 +88093,8 @@
         ],
         "description": [
             "Malafluxare 9"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x1013e": {
         "name": "3e",
@@ -87633,7 +88109,11 @@
             85,
             0,
             164
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1016f": {
         "name": "6f",
@@ -87648,7 +88128,11 @@
             61,
             60,
             43
-        ]
+        ],
+        "other_name": [
+            "Treasure 16"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101f5": {
         "name": "f5",
@@ -87666,7 +88150,8 @@
         ],
         "other_name": [
             "Panopticoa (4)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x101ff": {
         "name": "ff",
@@ -87681,7 +88166,11 @@
             105,
             70,
             135
-        ]
+        ],
+        "other_name": [
+            "Esoteric Message"
+        ],
+        "type_event": "Market/Other"
     },
     "0x201fa": {
         "name": "fa",
@@ -87699,7 +88188,8 @@
         ],
         "other_name": [
             "Supercomputer"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x20161": {
         "name": "61",
@@ -87714,7 +88204,11 @@
             165,
             103,
             45
-        ]
+        ],
+        "other_name": [
+            "Treasure 2"
+        ],
+        "type_event": "Market/Other"
     },
     "0x101f9": {
         "name": "f9",
@@ -87732,7 +88226,8 @@
         ],
         "other_name": [
             "Black Hole"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x2013f": {
         "name": "3f",
@@ -87747,7 +88242,11 @@
             219,
             205,
             192
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20166": {
         "name": "66",
@@ -87762,7 +88261,11 @@
             159,
             3,
             6
-        ]
+        ],
+        "other_name": [
+            "Treasure 7"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20167": {
         "name": "67",
@@ -87777,7 +88280,11 @@
             33,
             211,
             108
-        ]
+        ],
+        "other_name": [
+            "Treasure 8"
+        ],
+        "type_event": "Market/Other"
     },
     "0x20168": {
         "name": "68",
@@ -87792,7 +88299,11 @@
             124,
             61,
             232
-        ]
+        ],
+        "other_name": [
+            "Treasure 9"
+        ],
+        "type_event": "Market/Other"
     },
     "0x1011e": {
         "name": "1e",
@@ -87810,7 +88321,8 @@
         ],
         "other_name": [
             "1E - The Stalker's Game Shop"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1012f": {
         "name": "2f",
@@ -87825,7 +88337,11 @@
             127,
             147,
             30
-        ]
+        ],
+        "other_name": [
+            "Riddles (hint)"
+        ],
+        "type_event": "Market/Other"
     },
     "0x201f7": {
         "name": "f7",
@@ -87843,7 +88359,8 @@
         ],
         "other_name": [
             "The Infinite (2)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x2016f": {
         "name": "6f",
@@ -87858,7 +88375,11 @@
             215,
             113,
             162
-        ]
+        ],
+        "other_name": [
+            "Treasure 16"
+        ],
+        "type_event": "Market/Other"
     },
     "0x2016d": {
         "name": "6d",
@@ -87873,7 +88394,11 @@
             45,
             34,
             161
-        ]
+        ],
+        "other_name": [
+            "Treasure 14"
+        ],
+        "type_event": "Market/Other"
     },
     "0x201f8": {
         "name": "f8",
@@ -87891,7 +88416,8 @@
         ],
         "other_name": [
             "The Infinite (3)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x201f6": {
         "name": "f6",
@@ -87909,7 +88435,8 @@
         ],
         "other_name": [
             "The Infinite (1)"
-        ]
+        ],
+        "type_event": "Notes"
     },
     "0x2016e": {
         "name": "6e",
@@ -87924,7 +88451,11 @@
             109,
             139,
             142
-        ]
+        ],
+        "other_name": [
+            "Treasure 15"
+        ],
+        "type_event": "Market/Other"
     },
     "0x10109": {
         "name": "09",
@@ -87942,7 +88473,8 @@
         ],
         "other_name": [
             "Cavy Idol"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1015f": {
         "name": "5f",
@@ -87963,7 +88495,8 @@
         ],
         "description": [
             "Escutcheon"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x101fe": {
         "name": "fe",
@@ -87981,7 +88514,8 @@
         ],
         "other_name": [
             "FE - One-way Teleporter 3"
-        ]
+        ],
+        "type_event": "Exits"
     },
     "0x1015e": {
         "name": "5e",
@@ -88002,7 +88536,8 @@
         ],
         "description": [
             "Megamalafluxare"
-        ]
+        ],
+        "type_event": "Riddles"
     },
     "0x20183": {
         "name": "83",
@@ -88029,6 +88564,7 @@
         ],
         "ap_cost": [
             30
-        ]
+        ],
+        "type_event": "Movement"
     }
 }

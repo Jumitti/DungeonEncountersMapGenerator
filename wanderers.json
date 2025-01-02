@@ -12,9 +12,9 @@
             ]
         ],
         "color": [
-            226,
-            113,
-            106
+            128,
+            30,
+            30
         ],
         "description": [],
         "uses": [],
@@ -33,9 +33,9 @@
             ]
         ],
         "color": [
-            190,
-            134,
-            249
+            202,
+            57,
+            205
         ],
         "description": [],
         "uses": [],
@@ -54,9 +54,9 @@
             ]
         ],
         "color": [
-            173,
-            69,
-            21
+            101,
+            37,
+            102
         ],
         "description": [],
         "uses": [],
@@ -75,9 +75,9 @@
             ]
         ],
         "color": [
-            181,
-            106,
-            159
+            31,
+            138,
+            152
         ],
         "description": [],
         "uses": [],
@@ -96,9 +96,9 @@
             ]
         ],
         "color": [
-            93,
-            63,
-            156
+            118,
+            111,
+            108
         ],
         "description": [],
         "uses": [],
@@ -117,9 +117,9 @@
             ]
         ],
         "color": [
-            171,
-            69,
-            4
+            66,
+            123,
+            124
         ],
         "description": [],
         "uses": [],
@@ -138,9 +138,9 @@
             ]
         ],
         "color": [
-            49,
-            202,
-            230
+            45,
+            208,
+            76
         ],
         "description": [],
         "uses": [],
@@ -159,9 +159,9 @@
             ]
         ],
         "color": [
-            196,
-            18,
-            32
+            72,
+            187,
+            209
         ],
         "description": [],
         "uses": [],
@@ -180,9 +180,9 @@
             ]
         ],
         "color": [
-            199,
-            136,
-            139
+            4,
+            242,
+            156
         ],
         "description": [
             "Can equip Katana and Chirijisayagata"
@@ -203,9 +203,9 @@
             ]
         ],
         "color": [
-            107,
-            187,
-            46
+            115,
+            75,
+            221
         ],
         "description": [
             "Cannot equip magic"
@@ -226,9 +226,9 @@
             ]
         ],
         "color": [
-            198,
-            86,
-            80
+            7,
+            60,
+            115
         ],
         "description": [],
         "uses": [],
@@ -247,9 +247,9 @@
             ]
         ],
         "color": [
-            254,
-            66,
-            191
+            95,
+            113,
+            223
         ],
         "description": [
             "Can equip mechanical parts (Excavator, De-energizer, Steel Plating, Graphene Webbing). Cannot equip magic"
@@ -270,9 +270,9 @@
             ]
         ],
         "color": [
-            57,
-            38,
-            144
+            125,
+            116,
+            220
         ],
         "description": [
             "Can equip ROM, for some reason"
@@ -293,9 +293,9 @@
             ]
         ],
         "color": [
-            53,
-            231,
-            139
+            248,
+            177,
+            41
         ],
         "description": [
             "Can equip Meowitzer and Cutlery Set"
@@ -316,9 +316,9 @@
             ]
         ],
         "color": [
-            143,
-            103,
-            194
+            161,
+            176,
+            183
         ],
         "description": [],
         "uses": [],
@@ -337,9 +337,9 @@
             ]
         ],
         "color": [
-            0,
-            131,
-            224
+            193,
+            126,
+            62
         ],
         "description": [
             "Can equip Dragon Whisker and Megamalafluxare, Dragon Scale and Lizard Scale. Cannot equip weapons"

@@ -32,34 +32,35 @@ st.title("Dungeon Encounters Map Generator")
 
 with st.expander("**Welcome to the Dungeon Encounters Map Generator!**"):
     st.success(r"""
-        This generator creates dungeon maps for the game *Dungeon Encounters*. It allows you to create mazes, roads, or random maps with customizable options.
-    
-        **Generation Parameters:**
-        - **Generation Type**: Choose the type of map to generate:
-            - *Maze*: A classic maze with narrow paths.
-            - *Road*: A map with open roads and intersections.
-            - *Voronoi*: A generation type based on Voronoi diagrams, creating irregular zones.
-            - *Shuffle*: A mixed map type, with varied generation elements.
-        - **Depth, Empty Width, Node Number**: These parameters adjust the map generation characteristics based on the selected type.
-    
-        **Cheat Mode:**
-        - By enabling *cheat_mode*, all treasures, combat abilities, and movement skills will be placed on level 0, providing immediate access to all resources in the game.
-    
-        **After Generation:**
-        - Once the maps are generated, the `.bin` files should be placed in the following directory:
-          - `C:\Program Files (x86)\Steam\steamapps\common\DUNGEON ENCOUNTERS\DUNGEON ENCOUNTERS_Data\StreamingAssets\xlsx`
-          - Note: The directory path may vary depending on where your game is installed.
-    
-        **Important Reminder:**
-        - I do not take responsibility for any issues that may arise. I strongly recommend making a backup of your maps before replacing any files in the game directory.
-    
-        **Generation Delays and Errors:**
-        - Sometimes, map generation can be slow, especially for larger maps. If you encounter a `max_attempts` error, don’t be alarmed—it’s simply due to the time taken for the generation process. Just restart the generation, and it should work fine.
-        - Over time, I will continue to fix and improve any bugs, so please be patient and feel free to report any issues you encounter.
-    
-        This generator is perfect for creating custom maps for your Dungeon Encounters adventures. You can choose the map type, adjust parameters, and see the results in real time!
-    """)
+            This generator creates dungeon maps for the game *Dungeon Encounters*. It allows you to create mazes, roads, or random maps with customizable options.
 
+            **Generation Parameters:**
+            - **Generation Type**: Choose the type of map to generate:
+                - *Maze*: A classic maze with narrow paths.
+                - *Road*: A map with open roads and intersections.
+                - *Voronoi*: A generation type based on Voronoi diagrams, creating irregular zones.
+                - *Shuffle*: A mixed map type, with varied generation elements.
+            - **Depth, Empty Width, Node Number**: These parameters adjust the map generation characteristics based on the selected type.
+
+            **Cheat Mode:**
+            - By enabling *cheat_mode*, all treasures, combat abilities, and movement skills will be placed on level 0, providing immediate access to all resources in the game.
+
+            **After Generation:**
+            - Once the maps are generated, the `.bin` files should be placed in the following directory:
+              - `C:\Program Files (x86)\Steam\steamapps\common\DUNGEON ENCOUNTERS\DUNGEON ENCOUNTERS_Data\StreamingAssets\xlsx`
+              - Note: The directory path may vary depending on where your game is installed.
+
+            **Important Reminder:**
+            - I do not take responsibility for any issues that may arise. I strongly recommend making a backup of your maps before replacing any files in the game directory.
+
+            **Generation Delays and Errors:**
+            - Sometimes, map generation can be slow, especially for larger maps. If you encounter a `max_attempts` error, don’t be alarmed—it’s simply due to the time taken for the generation process. Just restart the generation, and it should work fine.
+            - Over time, I will continue to fix and improve any bugs, so please be patient and feel free to report any issues you encounter.
+
+            This generator is perfect for creating custom maps for your Dungeon Encounters adventures. You can choose the map type, adjust parameters, and see the results in real time!
+
+            **GitHub Repository**: [Dungeon Encounters Map Generator](https://github.com/Jumitti/DungeonEncountersMapGenerator)
+        """)
 st.sidebar.image(".streamlit/DE_icon.jpg")
 st.sidebar.header("Generation settings")
 nb_levels = st.sidebar.number_input("Number of levels", min_value=1, max_value=100, value=5)

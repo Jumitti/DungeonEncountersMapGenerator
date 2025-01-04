@@ -68,7 +68,6 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
         return True
 
     if max_depth <= 0:
-        print(color_settings(f"Maze (type: maze) generated.", bcolors.OKGREEN))
         return
 
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -116,7 +115,7 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
 
 
 # Voronoi
-def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=50,
+def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=100,
                      PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                 tile["name"] == "PATH"), None),
                      EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if

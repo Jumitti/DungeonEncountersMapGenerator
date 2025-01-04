@@ -13,6 +13,10 @@ output_dir = "output"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
+output_dir_720p = "output_720p"
+if not os.path.exists(output_dir_720p):
+    os.makedirs(output_dir_720p)
+
 grid_size = 100
 
 json_file = "special_tiles.json"
@@ -183,7 +187,7 @@ def generate_floor_data(lvl, maps_data=None, cheat_mode=False):
                                       bcolors.FAIL))
 
 
-def save_floor_image(grid, output_image_path):
+def save_floor_image(grid, output_image_path, output_image_path_720p):
     image = Image.new("RGB", (grid_size, grid_size), value_to_color[EMPTY])
     pixels = image.load()
 
@@ -193,6 +197,21 @@ def save_floor_image(grid, output_image_path):
 
     image.save(output_image_path)
     print(color_settings(f"Generated image: {output_image_path}", bcolors.OKGREEN))
+
+    image_720p = Image.new("RGB", (720, 720), value_to_color[EMPTY])
+    pixels_720p = image_720p.load()
+
+    scale_factor = 720 // grid_size
+
+    for x in range(grid_size):
+        for y in range(grid_size):
+            color = value_to_color[grid[x][y]]
+            for dx in range(scale_factor):
+                for dy in range(scale_factor):
+                    pixels_720p[x * scale_factor + dx, y * scale_factor + dy] = color
+
+    image_720p.save(output_image_path_720p)
+    print(color_settings(f"Generated 720x720 image: {output_image_path_720p}", bcolors.OKGREEN))
 
 
 def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mode=False):
@@ -215,7 +234,8 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mod
         lvl = data["level"]
         grid = data["grid"]
         output_image_path = os.path.join(output_dir, f"Map_m{lvl}.png")
-        save_floor_image(grid, output_image_path)
+        output_image_path_720p = os.path.join(output_dir_720p, f"Map_m{lvl}_720p.png")
+        save_floor_image(grid, output_image_path, output_image_path_720p)
 
         if generate_bin is True:
             DE.reconstruct_bin(lvl=lvl, image_path=output_image_path, output_directory=output_dir)
@@ -223,4 +243,4 @@ def run(nb_lvl, maze_type="voronoi", generate_bin=False, one_lvl=None, cheat_mod
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=[89, 90, 91], cheat_mode=False)
+    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=None, cheat_mode=False)

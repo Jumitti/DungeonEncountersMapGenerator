@@ -31,7 +31,7 @@ for value, tile in special_tiles.items():
     })
 
 df = pd.DataFrame(data)
-styled_df = df.style.applymap(highlight_color, subset=["Color"])
+styled_df = df.style.map(highlight_color, subset=["Color"])
 
 output_dir = "output"
 output_dir_720p = "output_720p"

@@ -1,9 +1,37 @@
-import streamlit as st
-import generate_maps
+import json
 import os
 import shutil
-from PIL import Image
 import zipfile
+
+import pandas as pd
+import streamlit as st
+from PIL import Image
+
+import generate_maps
+
+
+def highlight_color(val):
+    if isinstance(val, tuple):
+        r, g, b = val
+        return f"background-color: rgb({r}, {g}, {b});"
+    return ""
+
+
+with open("special_tiles.json", "r") as file:
+    special_tiles = json.load(file)
+
+data = []
+for value, tile in special_tiles.items():
+    data.append({
+        "Name": tile["name"],
+        "Color": tuple(tile["color"]),
+        "Other Name": ", ".join(tile.get("other_name", [])) if "other_name" in tile else "",
+        "Description": ", ".join(tile.get("description", [])) if "description" in tile else "",
+        "Value": value,
+    })
+
+df = pd.DataFrame(data)
+styled_df = df.style.applymap(highlight_color, subset=["Color"])
 
 output_dir = "output"
 output_dir_720p = "output_720p"
@@ -11,6 +39,13 @@ zip_path = None
 
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(output_dir_720p, exist_ok=True)
+
+if "output_files_720p" not in st.session_state:
+    st.session_state["output_files_720p"] = []
+if "zip_path" not in st.session_state:
+    st.session_state["zip_path"] = None
+if "generated" not in st.session_state:
+    st.session_state["generated"] = False
 
 st.set_page_config(
     page_title='Dungeon Encounters Map Generator',
@@ -21,16 +56,9 @@ st.set_page_config(
 
 st.logo(".streamlit/DE_icon.jpg")
 
-if "output_files_720p" not in st.session_state:
-    st.session_state["output_files_720p"] = []
-if "zip_path" not in st.session_state:
-    st.session_state["zip_path"] = None
-if "generated" not in st.session_state:
-    st.session_state["generated"] = False
-
 st.title("Dungeon Encounters Map Generator")
 
-with st.expander("**Welcome to the Dungeon Encounters Map Generator!**"):
+with st.expander("**Welcome to the Dungeon Encounters Map Generator! / How to Use the Generator**"):
     st.success(r"""
             This generator creates dungeon maps for the game *Dungeon Encounters*. It allows you to create mazes, roads, or random maps with customizable options.
 
@@ -61,6 +89,10 @@ with st.expander("**Welcome to the Dungeon Encounters Map Generator!**"):
 
             **GitHub Repository**: [Dungeon Encounters Map Generator](https://github.com/Jumitti/DungeonEncountersMapGenerator)
         """)
+
+with st.expander("**Color legend**"):
+    st.dataframe(styled_df, hide_index=True, use_container_width=True)
+
 st.sidebar.image(".streamlit/DE_icon.jpg")
 st.sidebar.header("Generation settings")
 nb_levels = st.sidebar.number_input("Number of levels", min_value=1, max_value=100, value=5)

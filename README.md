@@ -1,5 +1,7 @@
 # Dungeon Encounters Map Generator
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://dungeon-encounters-map-generator.streamlit.app/)
+
 This project generates maps for the game **Dungeon Encounters**, developed and published by **Square Enix**. It's a tool I created to reproduce the game's maps, reversing the maze generation process and allowing the manipulation of certain game elements.
 
 **Important Note**: This project relies on reverse engineering of the game files to understand the structure and recreate the maps. I am not responsible for any legal consequences arising from the use of this project.
@@ -26,38 +28,26 @@ In addition to the Python script, a **Streamlit** web app version is available f
 
 ## Installation
 
-1. Download the project and place it in a directory of your choice.
-2. Make sure you have Python installed on your machine (version 3.x recommended).
-3. Install the necessary dependencies:
+1. Download the project and place it in a directory of your choice.  
+2. Make sure you have Python installed on your machine (version 3.x recommended).  
+3. Install the necessary dependencies:  
    ```bash
    pip install -r requirements.txt
-   ```
-
-4. Copy the generated `.bin` files into the following directory of your **Dungeon Encounters** installation:
-   ```
-   C:\Program Files (x86)\Steam\steamapps\common\DUNGEON ENCOUNTERS\DUNGEON ENCOUNTERS_Data\StreamingAssets\xlsx
-   ```
-
-**Note**: I haven't tested this script with other versions of the game, so it may not work with versions other than the one mentioned.
-
-## Usage
-
-1. **Run the script**: Once the necessary files are in place, run the Python script to generate the maps.
+   ```  
+4. Optionally, run the Streamlit app for a user-friendly interface:  
    ```bash
-   python generate_maps.py
-   ```
+   streamlit run DEMG_streamlit.py
+   ```  
 
-2. **Generate Mazes**: The script will create image and binary files for each floor of the game. You can use these in your own instance of the game.
+## Where to Place the `.bin` Files
 
-3. **Modify Maps**: If you wish to customize the maps, you can modify the configuration files to adjust the parameters of the generated mazes.
+After generating the `.bin` files, copy them to the following directory in your **Dungeon Encounters** installation:  
+```
+C:\Program Files (x86)\Steam\steamapps\common\DUNGEON ENCOUNTERS\DUNGEON ENCOUNTERS_Data\StreamingAssets\xlsx
+```  
 
-4. **Streamlit Version**: For a more user-friendly experience, you can use the Streamlit web version of the tool. After starting the app with:
-   ```bash
-   streamlit run demg_streamlit.py
-   ```
-   - Choose the map type and configure parameters (e.g., Depth, Empty Width, Node Number).
-   - Enable *Cheat Mode* to automatically populate level 0 with treasures, combat abilities, and movement skills.
-   - After the maps are generated, download them and place the `.bin` files in the specified game directory.
+**Note**: This tool has been tested with the Steam version of the game. Compatibility with other versions may vary.  
+
 
 ## Important Reminder
 
@@ -68,3 +58,6 @@ In addition to the Python script, a **Streamlit** web app version is available f
 ## Acknowledgements
 
 - **Square Enix** for the creation of **Dungeon Encounters**.
+- **Exvaris (Reddit) et al.** for **[Compendium Project](https://docs.google.com/spreadsheets/d/1JCgdir76fjPvVMQwX287lc5BCNiZY6fA/edit?gid=313293529#gid=313293529)**
+- **gomtuu123 (Reddit)** for **[Interactive Map](https://gomtuu.org/dungeon-enc/#settings)**
+- **[r/DungeonEncounters](https://www.reddit.com/r/DungeonEncounters/)**

@@ -1201,11 +1201,9 @@ def cheat_mode(grid, lvl, special_tiles,
     x, y = 0, 0
     for cheat_key, cheat_data in special_tiles.items():
         if cheat_data.get("type_event") in ["Movement", "Battle", "Riddles"] or (
-                "other_name" in cheat_data and
-                re.search("Treasure", " ".join(cheat_data["other_name"]))
-        ):
-            x, y = find_next_empty(x, y)
+                "other_name" in cheat_data and re.search("Treasure", " ".join(cheat_data["other_name"]))):
 
+            x, y = find_next_empty(x, y)
             tile_value = next(
                 (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if key == cheat_key),
                 None
@@ -1215,7 +1213,6 @@ def cheat_mode(grid, lvl, special_tiles,
 
                 print(color_settings(
                     f"{cheat_data['name']} {cheat_data.get('other_name', '')}: z={lvl}, x={x}, y={y}",
-                    bcolors.BLACK, bcolors.BG_WHITE, bcolors.BLINK
-                ))
+                    bcolors.BLACK, bcolors.BG_WHITE, bcolors.BLINK))
 
     complete_path(grid, x // 2, y, "PATH")

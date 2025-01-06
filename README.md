@@ -19,6 +19,7 @@ The aim of this project is to enable users to generate **Dungeon Encounters** ma
 ### Features:
 
 - **Map Generation**: The script recreates mazes following the logic of the game.
+- **Seed Generation**: Use seeds (like in Minecraft) (LIMIT: seeds are permanently used, but if you set "shuffle", the type of maps will still be random)
 - **Creation of .bin Files**: Generates binary files from the created maps.
 - **Cheat Mode**: By enabling cheat mode, all treasures, combat abilities, and movement skills will be placed on level 0 for immediate access.
 

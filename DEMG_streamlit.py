@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import zipfile
+import re
 
 import pandas as pd
 import streamlit as st
@@ -33,12 +34,9 @@ for value, tile in special_tiles.items():
 df = pd.DataFrame(data)
 styled_df = df.style.map(highlight_color, subset=["Color"])
 
-output_dir = "output"
-output_dir_720p = "output_720p"
-zip_path = None
+tempo_dir = f"tempo"
+os.makedirs(tempo_dir, exist_ok=True)
 
-os.makedirs(output_dir, exist_ok=True)
-os.makedirs(output_dir_720p, exist_ok=True)
 
 if "output_files_720p" not in st.session_state:
     st.session_state["output_files_720p"] = []
@@ -119,65 +117,98 @@ if maze_type in ["Maze", "Road", "Voronoi"]:
 else:
     param_value = None
 
+if st.sidebar.toggle("Random seed", value=True):
+    seed_input = None
+    valid_seed = False
+
+else:
+    seed_input = st.sidebar.text_input("Enter Seed", value="", max_chars=10)
+
+    try:
+        generate_maps.validate_seed(seed_input)
+        valid_seed = False
+    except ValueError as e:
+        valid_seed = True
+        st.sidebar.error(e)
+
 cheat_mode = st.sidebar.checkbox("Cheat Mode", value=False)
 generate_bin = st.sidebar.checkbox("Generate .bin files", value=False)
 
 
 def clean_output_dirs():
-    for folder in [output_dir, output_dir_720p]:
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                st.error(f"Cleaning error {file_path}: {e}")
+    for filename in os.listdir(tempo_dir):
+        file_path = os.path.join(tempo_dir, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            st.error(f"Cleaning error {file_path}: {e}")
 
 
 sd_col1, sd_col2 = st.sidebar.columns(2)
 
-if sd_col1.button(f"Preview Map_{nb_levels - 1}"):
+if sd_col1.button(f"Preview Map_{nb_levels - 1}", disabled=valid_seed):
     clean_output_dirs()
-
     try:
-        generate_maps.run_streamlit(nb_lvl=None, maze_type=maze_type.lower(), generate_bin=generate_bin,
-                                    param_1=param_value, cheat_mode=cheat_mode, one_lvl=[nb_levels - 1])
-        st.success("Generation successfully completed!")
+        generate_maps.run(nb_lvl=None, maze_type=maze_type.lower(), generate_bin=generate_bin, seed=seed_input,
+                          param_1=param_value, cheat_mode=cheat_mode, one_lvl=[nb_levels - 1], type_progress="stqdm")
+        st.success("Generation successfully completed! Seed: " + seed)
 
         st.session_state["output_files_720p"] = sorted(
-            [os.path.join(output_dir_720p, f) for f in os.listdir(output_dir_720p) if f.endswith(".png")]
+            [os.path.join(tempo_dir, f) for f in os.listdir(tempo_dir) if f.endswith(".png")]
         )
         st.session_state["generated"] = True
 
     except Exception as e:
         st.error(e)
 
-if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})"):
+if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
     clean_output_dirs()
-
     try:
-        generate_maps.run_streamlit(nb_lvl=nb_levels, maze_type=maze_type.lower(), param_1=param_value,
-                                    generate_bin=generate_bin, cheat_mode=cheat_mode)
-        st.success("Generation successfully completed!")
+        seed = generate_maps.run(nb_lvl=nb_levels, maze_type=maze_type.lower(), param_1=param_value, seed=seed_input,
+                                 generate_bin=generate_bin, cheat_mode=cheat_mode, type_progress="stqdm")
+        st.success("Generation successfully completed! Seed: " + seed)
+
+        output_dir = f"output/{seed}"
+        output_dir_720p = f"output_720p/{seed}"
+        zip_path = None
+
+        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs(output_dir_720p, exist_ok=True)
 
         st.session_state["output_files_720p"] = sorted(
-            [os.path.join(output_dir_720p, f) for f in os.listdir(output_dir_720p) if f.endswith(".png")]
+            [os.path.join(tempo_dir, f) for f in os.listdir(tempo_dir) if f.endswith(".png")]
         )
         st.session_state["generated"] = True
+
+
+        def remove_map_files(directory):
+            for filename in os.listdir(directory):
+                match = re.match(r"Map_m(\d+)(?:_720p)?\.png", filename)
+                if match:
+                    i = int(match.group(1))
+                    if i >= nb_levels:
+                        file_path = os.path.join(directory, filename)
+                        os.remove(file_path)
+                        print(f"Deleted {file_path}")
+
+
+        remove_map_files(output_dir)
+        remove_map_files(output_dir_720p)
 
         st.session_state["zip_path"] = os.path.join(output_dir, "generated_maps.zip")
         with zipfile.ZipFile(st.session_state["zip_path"], "w") as zipf:
             for file in os.listdir(output_dir):
                 file_path = os.path.join(output_dir, file)
                 if os.path.isfile(file_path) and file != "generated_maps.zip":
-                    zipf.write(file_path, arcname=os.path.join("original", file))
+                    zipf.write(file_path, arcname=os.path.join(f"{seed}_original", file))
 
             for file in os.listdir(output_dir_720p):
                 file_path = os.path.join(output_dir_720p, file)
                 if os.path.isfile(file_path):
-                    zipf.write(file_path, arcname=os.path.join("720p", file))
+                    zipf.write(file_path, arcname=os.path.join(f"{seed}_720p", file))
 
     except Exception as e:
         st.error(e)
@@ -195,6 +226,6 @@ if st.session_state["zip_path"] and os.path.exists(st.session_state["zip_path"])
         st.sidebar.download_button(
             label="Download maps and .bin files",
             data=f,
-            file_name="generated_maps.zip",
+            file_name=f"generated_maps.zip",
             mime="application/zip"
         )

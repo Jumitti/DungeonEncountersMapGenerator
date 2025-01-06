@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 from scipy.spatial import Voronoi
 from utils.bcolors import bcolors, color_settings
+import hashlib
 
 
 # Note for a tile x, y:
@@ -55,7 +56,7 @@ def reconstruct_bin(lvl, image_path, output_directory="output"):
 
 # Map generator (maze, road, voronoi)
 # Maze
-def generate_maze(grid, start_x, start_y, max_depth=50,
+def generate_maze(grid, start_x, start_y, max_depth=50, seed=None,
                   PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                              tile["name"] == "PATH"), None),
                   EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
@@ -70,6 +71,8 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
     if max_depth <= 0:
         return
 
+    random.seed(seed)
+
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
     random.shuffle(directions)
 
@@ -79,11 +82,12 @@ def generate_maze(grid, start_x, start_y, max_depth=50,
                 nx, ny = start_x + dx * i, start_y + dy * i
                 if 0 <= nx < grid_size and 0 <= ny < grid_size:
                     grid[nx][ny] = PATH
-            generate_maze(grid, nx, ny, max_depth - 1)
+
+            generate_maze(grid, nx, ny, max_depth - 1, seed=seed)
 
 
 # Road
-def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
+def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100, seed=None,
                   PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                              tile["name"] == "PATH"), None),
                   EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
@@ -93,9 +97,11 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
                 [(0, route_width), (route_width, 0), (0, -route_width), (-route_width, 0)]
                 if 0 <= start_x + dx < grid_size and 0 <= start_y + dy < grid_size]
 
+    random.seed(seed)
+
     grid[start_x][start_y] = PATH
     frontier = neighbors(start_x, start_y)
-    shuffle(frontier)
+    random.shuffle(frontier)  # Utiliser la seed pour les résultats reproductibles
 
     while frontier:
         nx, ny = frontier.pop()
@@ -109,7 +115,7 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100,
             for neighbor in neighbors(nx, ny):
                 if grid[neighbor[0]][neighbor[1]] == EMPTY:
                     frontier.append(neighbor)
-            shuffle(frontier)
+            random.shuffle(frontier)  # Utiliser la seed pour les résultats reproductibles
 
     print(color_settings(f"Maze (type: road) generated.", bcolors.OKGREEN))
 
@@ -119,7 +125,10 @@ def generate_voronoi(grid, start_x, start_y, num_sites=25, grid_size=100,
                      PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                 tile["name"] == "PATH"), None),
                      EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
-                                 tile["name"] == "EMPTY"), None)):
+                                 tile["name"] == "EMPTY"), None),
+                     seed=None):
+    random.seed(seed)
+
     def bresenham_line(x1, y1, x2, y2):
         points = []
         dx = abs(x2 - x1)
@@ -268,7 +277,7 @@ def complete_path(grid, x, y, case_type="RANDOM",
 
 
 # Used especially when CROSS is added
-def connect_disconnected_groups(grid,
+def connect_disconnected_groups(grid, nb_groups=3,
                                 PATH=next(
                                     (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                      tile["name"] == "PATH"), None),
@@ -281,7 +290,7 @@ def connect_disconnected_groups(grid,
                                 CROSS=next(
                                     (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                                      tile["name"] == "CROSS"), None), grid_size=100):
-    # while True:
+
     visited = [[False for _ in range(grid_size)] for _ in range(grid_size)]
     groups = []
 
@@ -308,7 +317,7 @@ def connect_disconnected_groups(grid,
 
                 groups.append(group)
 
-    if len(groups) > 3:
+    if len(groups) > nb_groups:
         paired_groups = []
         for i in range(0, len(groups) - 1, 2):
             paired_groups.append((groups[i], groups[i + 1]))
@@ -351,7 +360,7 @@ def connect_disconnected_groups(grid,
 
 
 # Checks whether all tiles (PATH, HIDDEN and hidden tiles) are connected to each other
-def is_connected(grid, start_x, start_y, map_attempts, iteration,
+def is_connected(grid, start_x, start_y, iteration,
                  PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                             tile["name"] == "PATH"), None),
                  EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
@@ -380,10 +389,10 @@ def is_connected(grid, start_x, start_y, map_attempts, iteration,
                 visited_count += 1
 
     if visited_count == total_non_empty_count:
-        print(color_settings(f"Maze connected on attempt {map_attempts} and iteration {iteration}.", bcolors.OKGREEN))
+        print(color_settings(f"Maze connected on iteration {iteration}.", bcolors.OKGREEN))
         return True
     else:
-        print(color_settings(f"Maze not connected. Refining... (Map Attempt {map_attempts}, Iteration {iteration + 1})",
+        print(color_settings(f"Maze not connected. Refining... (Iteration {iteration + 1})",
                              bcolors.WARNING))
 
         return False
@@ -424,10 +433,10 @@ def refine_map(grid, case_type="RANDOM",
                     if (x == 0 or x == grid_size - 1) and (y == 0 or y == grid_size - 1):
                         complete_path(grid, x, y, case_type)
                     elif x == 0 or x == grid_size - 1:
-                        if 0 < y < grid_size - 1 and grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY:
+                        if 0 < y < grid_size - 1 and (grid[x][y - 1] == EMPTY or grid[x][y + 1] == EMPTY):
                             complete_path(grid, x, y, case_type)
                     elif y == 0 or y == grid_size - 1:
-                        if 0 < x < grid_size - 1 and grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY:
+                        if 0 < x < grid_size - 1 and (grid[x - 1][y] == EMPTY or grid[x + 1][y] == EMPTY):
                             complete_path(grid, x, y, case_type)
 
                 else:

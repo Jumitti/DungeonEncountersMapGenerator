@@ -105,7 +105,7 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
         if lvl == 0:
             grid[start_x][start_y] = START_FLOOR_0
             print(color_settings(
-                f"'00 Start: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
+                f"00 Start: z={lvl}, x={start_x}, y={start_y}", bcolors.OKCYAN))
             DE.complete_path(grid, start_x, start_y, "PATH")
         else:
             DE.place_ascending(grid, start_x, start_y, lvl, special_tiles)
@@ -143,6 +143,8 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
         DE.place_movement(grid, lvl, special_tiles)
 
         DE.place_battle(grid, lvl, special_tiles)
+
+        grid[1][1] = START_FLOOR_0
 
         nb_special_tiles = [
             (x, y) for x in range(grid_size) for y in range(grid_size)
@@ -269,4 +271,4 @@ def run_streamlit(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False,
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="voronoi", generate_bin=False, one_lvl=[86], cheat_mode=False, debug=True)
+    run(nb_lvl=100, maze_type="voronoi", generate_bin=False, one_lvl=[0], cheat_mode=False, debug=True)

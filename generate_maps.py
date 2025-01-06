@@ -144,8 +144,6 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
 
         DE.place_battle(grid, lvl, special_tiles)
 
-        grid[1][1] = START_FLOOR_0
-
         nb_special_tiles = [
             (x, y) for x in range(grid_size) for y in range(grid_size)
             if grid[x][y] not in [EMPTY, PATH, HIDDEN, CROSS]

@@ -18,6 +18,10 @@ output_dir_720p = "output_720p"
 if not os.path.exists(output_dir_720p):
     os.makedirs(output_dir_720p)
 
+debug_dir = "debug"
+if not os.path.exists(debug_dir):
+    os.makedirs(debug_dir)
+
 grid_size = 100
 
 json_file = "special_tiles.json"
@@ -148,7 +152,7 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
         while iteration < max_iterations:
             if DE.is_connected(grid, start_x, start_y, map_attempts, iteration):
                 if debug is True:
-                    save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_ar.png")
+                    save_floor_image(grid, f"debug/Map_m{lvl}_{map_attempts}_{iteration - 1}_ar.png")
                 if 49 < lvl < 59:
                     DE.place_cross(grid, lvl, special_tiles)
                     DE.connect_disconnected_groups(grid)
@@ -160,12 +164,12 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
                     print(color_settings("Refinement of the map has broken special tiles. Generating a new map...",
                                          bcolors.FAIL))
                     if debug is True:
-                        save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_broken.png")
+                        save_floor_image(grid, f"debug/Map_m{lvl}_{map_attempts}_{iteration - 1}_broken.png")
                     break
 
             else:
                 if debug is True:
-                    save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_br.png")
+                    save_floor_image(grid, f"debug/Map_m{lvl}_{map_attempts}_{iteration}_br.png")
                 DE.refine_map(grid)
                 iteration += 1
 
@@ -205,7 +209,7 @@ def save_floor_image(grid, output_image_path, output_image_path_720p=None):
         print(color_settings(f"Generated 720x720 image: {output_image_path_720p}", bcolors.OKGREEN))
 
 
-def run(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False, one_lvl=None, cheat_mode=False):
+def run(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False, one_lvl=None, cheat_mode=False, debug=False):
     if maze_type not in ["maze", "road", "voronoi", "shuffle"]:
         raise ValueError(color_settings('maze_type must be "maze", "road", "voronoi", "shuffle"', bcolors.FAIL))
 
@@ -214,12 +218,12 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False, one_lvl=N
     if one_lvl is not None:
         for lvl in tqdm(one_lvl, desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
             grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
-                                       cheat_mode=cheat_mode)
+                                       cheat_mode=cheat_mode, debug=debug)
             maps_data.append({"level": lvl, "grid": grid})
     else:
         for i in tqdm(range(nb_lvl), desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
             grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
-                                       cheat_mode=cheat_mode)
+                                       cheat_mode=cheat_mode, debug=debug)
             maps_data.append({"level": i, "grid": grid})
 
     for data in tqdm(maps_data, desc=color_settings("Saving images and generating binaries", bcolors.WARNING),
@@ -265,4 +269,4 @@ def run_streamlit(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False,
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="voronoi", generate_bin=False, one_lvl=[49, 50], cheat_mode=False)
+    run(nb_lvl=100, maze_type="voronoi", generate_bin=False, one_lvl=[86], cheat_mode=False, debug=True)

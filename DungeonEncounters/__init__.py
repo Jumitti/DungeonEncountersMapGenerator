@@ -705,7 +705,7 @@ def place_shop(grid, lvl, special_tiles,
             other_name = shop_data["other_name"]
             if isinstance(other_name, list):
                 other_name = " ".join(other_name)
-            if not re.search(r"hint|Treasure|Shrine|Spring|Fountain|Station|Start|Idol", other_name):
+            if not re.search(r"hint|Treasure|Shrine|Spring|Fountain|Station|Start|Idol|Adventurer", other_name):
                 coords = shop_data["coord"]
                 for coord in coords:
                     if lvl == coord[0]:

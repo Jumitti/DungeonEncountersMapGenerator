@@ -308,7 +308,7 @@ def connect_disconnected_groups(grid,
 
                 groups.append(group)
 
-    if len(groups) > 1:
+    if len(groups) > 2:
         paired_groups = []
         for i in range(0, len(groups) - 1, 2):
             paired_groups.append((groups[i], groups[i + 1]))
@@ -419,21 +419,18 @@ def refine_map(grid, case_type="RANDOM",
                     for key, tile in json.load(open("special_tiles.json")).items()
                 }
 
-                # case_name = special_cases.get(grid[x][y], "UNKNOWN")
                 target_case = HIDDEN if special_cases.get(grid[x][y], "UNKNOWN") not in ['PATH', "HIDDEN"] else grid[x][
                     y]
 
                 if x == 0 or x == grid_size - 1 or y == 0 or y == grid_size - 1:
                     if x == 0 or x == grid_size - 1:
                         if 0 < y < grid_size - 1 and grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY:
-                            grid[x][y] = EMPTY
                             complete_path(grid, x, y, case_type)
-                            grid[x][y] = target_case
+                            grid[x][y] = grid[x][y]
                     elif y == 0 or y == grid_size - 1:
                         if 0 < x < grid_size - 1 and grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY:
-                            grid[x][y] = EMPTY
                             complete_path(grid, x, y, case_type)
-                            grid[x][y] = target_case
+                            grid[x][y] = grid[x][y]
 
                 else:
                     if (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
@@ -441,9 +438,8 @@ def refine_map(grid, case_type="RANDOM",
                             grid[x - 1][y - 1] == EMPTY and grid[x - 1][y + 1] == EMPTY and
                             grid[x + 1][y - 1] == EMPTY and grid[x + 1][y + 1] == EMPTY):
 
-                        grid[x][y] = EMPTY
                         complete_path(grid, x, y, case_type)
-                        grid[x][y] = target_case
+                        grid[x][y] = grid[x][y]
 
                     elif (grid[x - 1][y] == EMPTY and grid[x + 1][y] == EMPTY and
                           grid[x][y - 1] == EMPTY and grid[x][y + 1] == EMPTY):

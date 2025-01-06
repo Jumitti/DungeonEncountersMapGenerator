@@ -54,7 +54,7 @@ if EMPTY is None or PATH is None or HIDDEN is None or START_FLOOR_0 is None:
     raise ValueError(color_settings("The necessary values are not present in the JSON file.", bcolors.FAIL))
 
 
-def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, cheat_mode=False):
+def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, cheat_mode=False, debug=False):
     max_iterations = 5
     max_map_attempts = 5
     map_attempts = 0
@@ -147,6 +147,8 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
 
         while iteration < max_iterations:
             if DE.is_connected(grid, start_x, start_y, map_attempts, iteration):
+                if debug is True:
+                    save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_ar.png")
                 if 49 < lvl < 59:
                     DE.place_cross(grid, lvl, special_tiles)
                     DE.connect_disconnected_groups(grid)
@@ -155,10 +157,15 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
                                                  grid[x][y] not in [EMPTY, PATH, HIDDEN, CROSS]]):
                     return grid
                 else:
-                    print(color_settings("Refinement of the map has broken special tiles. Generating a new map...", bcolors.FAIL))
+                    print(color_settings("Refinement of the map has broken special tiles. Generating a new map...",
+                                         bcolors.FAIL))
+                    if debug is True:
+                        save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_broken.png")
                     break
 
             else:
+                if debug is True:
+                    save_floor_image(grid, f"Map_m{lvl}_{map_attempts}_{iteration}_br.png")
                 DE.refine_map(grid)
                 iteration += 1
 
@@ -170,7 +177,7 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
                                       bcolors.FAIL))
 
 
-def save_floor_image(grid, output_image_path, output_image_path_720p):
+def save_floor_image(grid, output_image_path, output_image_path_720p=None):
     image = Image.new("RGB", (grid_size, grid_size), value_to_color[EMPTY])
     pixels = image.load()
 
@@ -181,20 +188,21 @@ def save_floor_image(grid, output_image_path, output_image_path_720p):
     image.save(output_image_path)
     print(color_settings(f"Generated image: {output_image_path}", bcolors.OKGREEN))
 
-    image_720p = Image.new("RGB", (720, 720), value_to_color[EMPTY])
-    pixels_720p = image_720p.load()
+    if output_image_path_720p is not None:
+        image_720p = Image.new("RGB", (720, 720), value_to_color[EMPTY])
+        pixels_720p = image_720p.load()
 
-    scale_factor = 720 // grid_size
+        scale_factor = 720 // grid_size
 
-    for x in range(grid_size):
-        for y in range(grid_size):
-            color = value_to_color[grid[x][y]]
-            for dx in range(scale_factor):
-                for dy in range(scale_factor):
-                    pixels_720p[x * scale_factor + dx, y * scale_factor + dy] = color
+        for x in range(grid_size):
+            for y in range(grid_size):
+                color = value_to_color[grid[x][y]]
+                for dx in range(scale_factor):
+                    for dy in range(scale_factor):
+                        pixels_720p[x * scale_factor + dx, y * scale_factor + dy] = color
 
-    image_720p.save(output_image_path_720p)
-    print(color_settings(f"Generated 720x720 image: {output_image_path_720p}", bcolors.OKGREEN))
+        image_720p.save(output_image_path_720p)
+        print(color_settings(f"Generated 720x720 image: {output_image_path_720p}", bcolors.OKGREEN))
 
 
 def run(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False, one_lvl=None, cheat_mode=False):
@@ -205,11 +213,13 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False, one_lvl=N
 
     if one_lvl is not None:
         for lvl in tqdm(one_lvl, desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
-            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1, cheat_mode=cheat_mode)
+            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
+                                       cheat_mode=cheat_mode)
             maps_data.append({"level": lvl, "grid": grid})
     else:
         for i in tqdm(range(nb_lvl), desc=color_settings(f"Generating maps...", bcolors.OKGREEN), colour="green"):
-            grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1, cheat_mode=cheat_mode)
+            grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
+                                       cheat_mode=cheat_mode)
             maps_data.append({"level": i, "grid": grid})
 
     for data in tqdm(maps_data, desc=color_settings("Saving images and generating binaries", bcolors.WARNING),
@@ -233,15 +243,16 @@ def run_streamlit(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False,
 
     if one_lvl is not None:
         for lvl in stqdm(one_lvl, desc=f"Generating maps..."):
-            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1, cheat_mode=cheat_mode)
+            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
+                                       cheat_mode=cheat_mode)
             maps_data.append({"level": lvl, "grid": grid})
     else:
         for i in stqdm(range(nb_lvl), desc=f"Generating maps..."):
-            grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1, cheat_mode=cheat_mode)
+            grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
+                                       cheat_mode=cheat_mode)
             maps_data.append({"level": i, "grid": grid})
 
-    for data in stqdm(maps_data, desc=color_settings("Saving images and generating binaries", bcolors.WARNING),
-                     colour="yellow"):
+    for data in stqdm(maps_data, desc="Saving images and generating binaries"):
         lvl = data["level"]
         grid = data["grid"]
         output_image_path = os.path.join(output_dir, f"Map_m{lvl}.png")
@@ -254,4 +265,4 @@ def run_streamlit(nb_lvl, maze_type="voronoi", param_1=None, generate_bin=False,
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="shuffle", generate_bin=False, one_lvl=None, cheat_mode=False)
+    run(nb_lvl=100, maze_type="voronoi", generate_bin=False, one_lvl=[49, 50], cheat_mode=False)

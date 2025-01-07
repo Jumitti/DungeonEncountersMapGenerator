@@ -152,7 +152,7 @@ sd_col1, sd_col2 = st.sidebar.columns(2)
 if sd_col1.button(f"Preview Map_{nb_levels - 1}", disabled=valid_seed):
     clean_output_dirs()
     try:
-        generate_maps.run(nb_lvl=None, maze_type=maze_type.lower(), generate_bin=generate_bin, seed=seed_input,
+        seed = generate_maps.run(nb_lvl=None, maze_type=maze_type.lower(), generate_bin=generate_bin, seed=seed_input,
                           param_1=param_value, cheat_mode=cheat_mode, one_lvl=[nb_levels - 1], type_progress="stqdm")
         st.success("Generation successfully completed! Seed: " + seed)
 

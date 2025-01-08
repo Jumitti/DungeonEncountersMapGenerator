@@ -295,16 +295,16 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
         lvl = data["level"]
         grid = data["grid"]
 
-        tempo_dir, tempo_dir_720p = (f"tempo/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/100p",
-                                     f"tempo/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/720p")
+        tempo_dir, tempo_dir_720p = (f"tempo/{maze_type}_{seed}_{param_1 if param_1 is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/100p",
+                                     f"tempo/{maze_type}_{seed}_{param_1 if param_1 is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/720p")
         if not os.path.exists(tempo_dir):
             os.makedirs(tempo_dir)
         if not os.path.exists(tempo_dir_720p):
             os.makedirs(tempo_dir_720p)
 
         if nb_lvl == 100 and one_lvl is None:
-            saved_seed = f"saved_seed/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
-            saved_seed_720p = f"saved_seed/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
+            saved_seed = f"saved_seed/{maze_type}_{seed}_{param_1 if param_1 is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
+            saved_seed_720p = f"saved_seed/{maze_type}_{seed}_{param_1 if param_1 is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
             if not os.path.exists(saved_seed):
                 os.makedirs(saved_seed)
             if not os.path.exists(saved_seed_720p):
@@ -312,6 +312,7 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
             saved_seed_IP = os.path.join(saved_seed, f"Map_m{lvl}.png")
             saved_seed_IP_720p = os.path.join(saved_seed_720p, f"Map_m{lvl}_720p.png")
         else:
+            saved_seed = None
             saved_seed_IP, saved_seed_IP_720p = None, None
 
         output_image_path = os.path.join(tempo_dir, f"Map_m{lvl}.png")

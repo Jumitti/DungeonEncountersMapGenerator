@@ -23,6 +23,9 @@ import hashlib
 # Generate .bin file from image 100x100
 def reconstruct_bin(lvl, image_path, output_directories):
     for output_directory in output_directories:
+        if output_directory is None:
+            continue
+
         output_bin_path = os.path.join(output_directory, f"Map_m{lvl}.bin")
 
         image = Image.open(image_path)

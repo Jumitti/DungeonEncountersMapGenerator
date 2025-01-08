@@ -154,8 +154,8 @@ def clean_output_dirs(directories):
 
 sd_col1, sd_col2 = st.sidebar.columns(2)
 
-tempo_dir = f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
-tempo_dir_720p = f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
+tempo_dir = f"tempo/{maze_type.lower()}_{seed_input}_{param_value if param_value is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
+tempo_dir_720p = f"tempo/{maze_type.lower()}_{seed_input}_{param_value if param_value is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
 if not os.path.exists(tempo_dir):
     os.makedirs(tempo_dir)
 if not os.path.exists(tempo_dir_720p):
@@ -192,8 +192,8 @@ if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
         )
 
         st.session_state["generated"] = True
-        st.session_state["zip_path"] = os.path.join(f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}",
-                                                    f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}_{'nocheat' if cheat_mode is False else 'cheat'}.zip')
+        st.session_state["zip_path"] = os.path.join(f"tempo/{maze_type.lower()}_{seed_input}_{param_value if param_value is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}",
+                                                    f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}_{param_value if param_value is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}.zip')
         with zipfile.ZipFile(st.session_state["zip_path"], "w") as zipf:
             for file in os.listdir(tempo_dir):
                 file_path = os.path.join(tempo_dir, file)
@@ -221,7 +221,7 @@ try:
         with open(st.session_state["zip_path"], "rb") as f:
             st.sidebar.download_button(
                 label="💾 Download maps and .bin files", data=f,
-                file_name=f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip', mime="application/zip")
+                file_name=f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}_{param_value if param_value is not None else 'default'}_{'nocheat' if cheat_mode is False else 'cheat'}.zip', mime="application/zip")
 except Exception as e:
     st.warning("Maps not generated yet.")
 

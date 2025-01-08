@@ -15,10 +15,11 @@ def parse_saved_seed_dir(directory):
         subfolder_100p = os.path.join(folder_path, "100p")
         if os.path.isdir(folder_path) and os.path.isdir(subfolder_100p):
             try:
-                maze_type, seed, cheat = folder.split("_")
+                maze_type, seed, param, cheat = folder.split("_")
                 data.append({
                     "Seed": seed,
                     "Maze Type": maze_type,
+                    "Setting": param,
                     "Cheat Mode": "✅" if cheat == "cheat" else "❌",
                     "Folder Path": folder_path,
                 })
@@ -27,10 +28,10 @@ def parse_saved_seed_dir(directory):
     return data
 
 
-def show_details(folder_path, seed, maze_type, cheat_mode):
+def show_details(folder_path, seed, maze_type, cheat_mode, param_1):
     subfolder_720p = os.path.join(folder_path, "720p")
     subfolder_100p = os.path.join(folder_path, "100p")
-    st.subheader(f"Seed: {seed} | Maze Type: {maze_type}")
+    st.subheader(f"Seed: {seed} | Maze Type: {maze_type} | Setting: {param_1} | Cheat Mode: {cheat_mode}")
     col1, col2 = st.columns([2, 1])
     if os.path.isdir(subfolder_720p):
         files_720p = [os.path.join(subfolder_720p, f) for f in os.listdir(subfolder_720p) if f.endswith((".png", ".jpg"))]
@@ -46,7 +47,7 @@ def show_details(folder_path, seed, maze_type, cheat_mode):
     else:
         st.warning(f"No 720p folder found in {folder_path}")
 
-    zip_file_path = os.path.join(folder_path, f"{maze_type}_{seed}_{'nocheat' if cheat_mode == '❌' else 'cheat'}.zip")
+    zip_file_path = os.path.join(folder_path, f"{maze_type}_{seed}_{param_1}_{'nocheat' if cheat_mode == '❌' else 'cheat'}.zip")
     if not os.path.exists(zip_file_path):
         with st.spinner("Creating .bin files..."):
             for i in range(100):
@@ -79,7 +80,7 @@ page_config(logo=True)
 st.title("Community Seeds 🌱")
 st.success(
     "Welcome to the Community Seeds Tab! 🌱 Here, you'll find Seeds created by players (only if all 100 levels have been generated). "
-    "You can view them by checking the boxes in the 'Show' column and download the maps along with .bin files. "
+    "You can view them by checking the boxes in the 'Show' column and download the maps along with .bin files. 'Setting' is the generation parameter (Depth, Empty Width, Node Number)."
     "\n\nIf nothing appears, the Streamlit server may have restarted, and the files were cleared. More information is available on the main page.")
 
 saved_seed_dir = "saved_seed"
@@ -116,7 +117,7 @@ if len(os.listdir(saved_seed_dir)) > 0:
 
         for index, row in edited_df.iterrows():
             if row["Show"]:
-                folder_path = os.path.join(saved_seed_dir, f"{row['Maze Type']}_{row['Seed']}_{'nocheat' if row['Cheat Mode'] == '❌' else 'cheat'}")
-                show_details(folder_path, row["Seed"], row["Maze Type"], row["Cheat Mode"])
+                folder_path = os.path.join(saved_seed_dir, f"{row['Maze Type']}_{row['Seed']}_{row["Setting"]}_{'nocheat' if row['Cheat Mode'] == '❌' else 'cheat'}")
+                show_details(folder_path, row["Seed"], row["Maze Type"], row["Cheat Mode"], row["Setting"])
     else:
         sf_st2.warning("No saved seeds found. 😓")

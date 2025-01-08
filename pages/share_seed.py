@@ -5,6 +5,7 @@ import shutil
 import streamlit as st
 from PIL import Image
 from utils.page_config import page_config
+import DungeonEncounters as DE
 
 
 def parse_saved_seed_dir(directory):
@@ -47,6 +48,11 @@ def show_details(folder_path, seed, maze_type, cheat_mode):
 
     zip_file_path = os.path.join(folder_path, f"{maze_type}_{seed}_{'nocheat' if cheat_mode == '❌' else 'cheat'}.zip")
     if not os.path.exists(zip_file_path):
+        with st.spinner("Creating .bin files..."):
+            for i in range(100):
+                output_image_path = os.path.join(subfolder_100p, f"Map_m{i}.png")
+                DE.reconstruct_bin(lvl=i, image_path=output_image_path, output_directories=[subfolder_100p])
+
         with st.spinner("Creating ZIP file..."):
             zipf = zipfile.ZipFile(zip_file_path, "w", zipfile.ZIP_DEFLATED)
 

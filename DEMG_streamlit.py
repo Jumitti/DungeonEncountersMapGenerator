@@ -53,9 +53,9 @@ if 'maze_type_save' not in st.session_state:
 
 page_config(logo=True)
 
-st.title("Dungeon Encounters Map Generator")
+st.title("Dungeon Encounters Map Generator 🧱")
 
-with st.expander("**Welcome to the Dungeon Encounters Map Generator! / How to Use the Generator**"):
+with st.expander("👋🏽 **Welcome to the Dungeon Encounters Map Generator! / ❓ How to Use the Generator**"):
     st.success(r"""
             This generator creates dungeon maps for the game *[Dungeon Encounters](https://fr.store.square-enix-games.com/dungeon-encounters---digital) from Square Enix*. It allows you to create mazes, roads, or random maps with customizable options.
 
@@ -87,12 +87,12 @@ with st.expander("**Welcome to the Dungeon Encounters Map Generator! / How to Us
             **GitHub Repository**: [Dungeon Encounters Map Generator](https://github.com/Jumitti/DungeonEncountersMapGenerator)
         """)
 
-with st.expander("**Color legend**"):
+with st.expander("🎨 **Color legend**"):
     st.dataframe(styled_df, hide_index=True, use_container_width=True)
 
-st.sidebar.header("Generation settings")
-nb_levels = st.sidebar.number_input("Number of levels", min_value=1, max_value=100, value=5)
-maze_type = st.sidebar.selectbox("Type of maze", ["Maze", "Road", "Voronoi", "Shuffle"], index=2)
+st.sidebar.header("⚙️ Generation settings")
+nb_levels = st.sidebar.number_input("🔢 Number of levels", min_value=1, max_value=100, value=5)
+maze_type = st.sidebar.selectbox("🗺️ Type of maze", ["Maze", "Road", "Voronoi", "Shuffle"], index=2)
 
 if maze_type == "Maze":
     param_label = "Depth"
@@ -115,10 +115,10 @@ if maze_type in ["Maze", "Road", "Voronoi"]:
 else:
     param_value = None
 
-if st.sidebar.checkbox("Use Random Seed", value=True):
+if st.sidebar.checkbox("🎲 Random Seed", value=True):
     st.sidebar.text(f"Seed: {st.session_state['generated_seed']}")
 
-    if st.sidebar.button("Generate New Seed"):
+    if st.sidebar.button("🌱 Generate New Seed"):
         st.session_state["generated_seed"] = ''.join(random.choices(string.digits, k=10))
 
     seed_input = st.session_state["generated_seed"]
@@ -135,8 +135,8 @@ else:
         valid_seed = True
         st.sidebar.error(e)
 
-cheat_mode = st.sidebar.checkbox("Cheat Mode", value=False)
-generate_bin = st.sidebar.checkbox("Generate .bin files", value=False)
+cheat_mode = st.sidebar.checkbox("🥷🏽 Cheat Mode", value=False)
+generate_bin = st.sidebar.checkbox("📦 Generate .bin files", value=False)
 
 
 def clean_output_dirs(directories):
@@ -154,8 +154,8 @@ def clean_output_dirs(directories):
 
 sd_col1, sd_col2 = st.sidebar.columns(2)
 
-tempo_dir = f"tempo/{maze_type.lower()}_{seed_input}/100p"
-tempo_dir_720p = f"tempo/{maze_type.lower()}_{seed_input}/720p"
+tempo_dir = f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
+tempo_dir_720p = f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
 if not os.path.exists(tempo_dir):
     os.makedirs(tempo_dir)
 if not os.path.exists(tempo_dir_720p):
@@ -192,8 +192,8 @@ if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
         )
 
         st.session_state["generated"] = True
-        st.session_state["zip_path"] = os.path.join(f"tempo/{maze_type.lower()}_{seed_input}",
-                                                    f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip')
+        st.session_state["zip_path"] = os.path.join(f"tempo/{maze_type.lower()}_{seed_input}_{'nocheat' if cheat_mode is False else 'cheat'}",
+                                                    f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}_{'nocheat' if cheat_mode is False else 'cheat'}.zip')
         with zipfile.ZipFile(st.session_state["zip_path"], "w") as zipf:
             for file in os.listdir(tempo_dir):
                 file_path = os.path.join(tempo_dir, file)
@@ -205,21 +205,23 @@ if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
                 if os.path.isfile(file_path):
                     zipf.write(file_path, arcname=os.path.join(f"720p", file))
 
+        st.success("Generation successfully completed! Seed: " + st.session_state["seed"])
     except Exception as e:
         st.error(e)
 
+try:
+    if st.session_state["generated"] and st.session_state["output_files_720p"]:
+        tabs = st.tabs([os.path.basename(file_path) for file_path in st.session_state["output_files_720p"]])
+        for i, file_path in enumerate(st.session_state["output_files_720p"]):
+            with tabs[i]:
+                image = Image.open(file_path)
+                st.image(image, caption=f"{os.path.basename(file_path)}")
 
-if st.session_state["generated"] and st.session_state["output_files_720p"]:
-    st.success("Generation successfully completed! Seed: " + st.session_state["seed"])
-    tabs = st.tabs([os.path.basename(file_path) for file_path in st.session_state["output_files_720p"]])
-    for i, file_path in enumerate(st.session_state["output_files_720p"]):
-        with tabs[i]:
-            image = Image.open(file_path)
-            st.image(image, caption=f"{os.path.basename(file_path)}")
-
-if st.session_state["zip_path"] and os.path.exists(st.session_state["zip_path"]):
-    with open(st.session_state["zip_path"], "rb") as f:
-        st.sidebar.download_button(
-            label="Download maps and .bin files", data=f,
-            file_name=f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip', mime="application/zip")
+    if st.session_state["zip_path"] and os.path.exists(st.session_state["zip_path"]):
+        with open(st.session_state["zip_path"], "rb") as f:
+            st.sidebar.download_button(
+                label="💾 Download maps and .bin files", data=f,
+                file_name=f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip', mime="application/zip")
+except Exception as e:
+    st.warning("Maps not generated yet.")
 

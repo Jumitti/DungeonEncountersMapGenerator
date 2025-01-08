@@ -71,7 +71,7 @@ def show_details(folder_path, seed, maze_type, cheat_mode, param_1):
 
     with open(zip_file_path, "rb") as f:
         col2.download_button(label="💾 Download maps and .bin files", data=f, mime="application/zip",
-                             file_name=f"{maze_type}_{seed}_{'nocheat' if cheat_mode == '❌' else 'cheat'}.zip")
+                             file_name=f"{maze_type}_{seed}_{param_1}_{'nocheat' if cheat_mode == '❌' else 'cheat'}.zip")
 
     st.divider()
 

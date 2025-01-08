@@ -302,7 +302,7 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
         if not os.path.exists(tempo_dir_720p):
             os.makedirs(tempo_dir_720p)
 
-        if nb_lvl == 1 and one_lvl is None:
+        if nb_lvl == 100 and one_lvl is None:
             saved_seed = f"saved_seed/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/100p"
             saved_seed_720p = f"saved_seed/{maze_type}_{seed}_{'nocheat' if cheat_mode is False else 'cheat'}/720p"
             if not os.path.exists(saved_seed):

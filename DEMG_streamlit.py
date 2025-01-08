@@ -154,13 +154,16 @@ def clean_output_dirs(directories):
 
 sd_col1, sd_col2 = st.sidebar.columns(2)
 
-tempo_dir = f"tempo/{maze_type}_{seed_input}/100p"
-tempo_dir_720p = f"tempo/{maze_type}_{seed_input}/720p"
+tempo_dir = f"tempo/{maze_type.lower()}_{seed_input}/100p"
+tempo_dir_720p = f"tempo/{maze_type.lower()}_{seed_input}/720p"
+if not os.path.exists(tempo_dir):
+    os.makedirs(tempo_dir)
+if not os.path.exists(tempo_dir_720p):
+    os.makedirs(tempo_dir_720p)
 
 st.divider()
 if sd_col1.button(f"Preview Map_{nb_levels - 1}", disabled=valid_seed):
-    if ["seed", 'maze_type_save'] in st.session_state:
-        clean_output_dirs([tempo_dir, tempo_dir_720p])
+    clean_output_dirs([tempo_dir, tempo_dir_720p])
     try:
         seed = generate_maps.run(nb_lvl=None, maze_type=maze_type.lower(), generate_bin=generate_bin, seed=seed_input,
                                  param_1=param_value, cheat_mode=cheat_mode, one_lvl=[nb_levels - 1], type_progress="stqdm")
@@ -177,8 +180,7 @@ if sd_col1.button(f"Preview Map_{nb_levels - 1}", disabled=valid_seed):
 
 if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
     zip_path = None
-    if ["seed", 'maze_type_save'] in st.session_state:
-        clean_output_dirs([tempo_dir, tempo_dir_720p])
+    clean_output_dirs([tempo_dir, tempo_dir_720p])
     try:
         seed = generate_maps.run(nb_lvl=nb_levels, maze_type=maze_type.lower(), param_1=param_value, seed=seed_input,
                                  generate_bin=generate_bin, cheat_mode=cheat_mode, type_progress="stqdm")
@@ -188,19 +190,20 @@ if sd_col2.button(f"Generate maps (0 to {nb_levels - 1})", disabled=valid_seed):
         st.session_state["output_files_720p"] = sorted(
             [os.path.join(tempo_dir_720p, f) for f in os.listdir(tempo_dir_720p) if f.endswith(".png")]
         )
-        st.session_state["generated"] = True
 
-        st.session_state["zip_path"] = os.path.join(tempo_dir, f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip')
+        st.session_state["generated"] = True
+        st.session_state["zip_path"] = os.path.join(f"tempo/{maze_type.lower()}_{seed_input}",
+                                                    f'{st.session_state["maze_type_save"]}_{st.session_state["seed"]}.zip')
         with zipfile.ZipFile(st.session_state["zip_path"], "w") as zipf:
             for file in os.listdir(tempo_dir):
                 file_path = os.path.join(tempo_dir, file)
-                if os.path.isfile(file_path) and file != "generated_maps.zip":
-                    zipf.write(file_path, arcname=os.path.join(f"{seed}_original", file))
+                if os.path.isfile(file_path):
+                    zipf.write(file_path, arcname=os.path.join(f"100p", file))
 
             for file in os.listdir(tempo_dir_720p):
                 file_path = os.path.join(tempo_dir_720p, file)
                 if os.path.isfile(file_path):
-                    zipf.write(file_path, arcname=os.path.join(f"{seed}_720p", file))
+                    zipf.write(file_path, arcname=os.path.join(f"720p", file))
 
     except Exception as e:
         st.error(e)

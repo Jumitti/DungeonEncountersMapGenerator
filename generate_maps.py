@@ -317,7 +317,7 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
         output_image_path_720p = os.path.join(tempo_dir_720p, f"Map_m{lvl}_720p.png")
         save_floor_image(grid, output_image_path, output_image_path_720p, saved_seed_IP, saved_seed_IP_720p)
 
-        if generate_bin is True:
+        if generate_bin is True and one_lvl is None:
             DE.reconstruct_bin(lvl=lvl, image_path=output_image_path, output_directories=[tempo_dir, saved_seed])
             print(color_settings(f"Binary and image files for level {lvl} saved in: {tempo_dir}", bcolors.OKGREEN))
 

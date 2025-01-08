@@ -1,12 +1,11 @@
 /maps/
 /maps_scrapping.py
 /image_to_map.py
-/output/
 /xlsx_compile_scrap.py
 /DE.xlsx
 /.idea/
 /error.py
 /special_tiles_refined_bak.json
-/output_720p/
 /debug/
 /tempo/
+/saved_seed/

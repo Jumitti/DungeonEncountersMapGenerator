@@ -21,37 +21,38 @@ import hashlib
 
 
 # Generate .bin file from image 100x100
-def reconstruct_bin(lvl, image_path, output_directory="output"):
-    output_bin_path = os.path.join(output_directory, f"Map_m{lvl}.bin")
+def reconstruct_bin(lvl, image_path, output_directories):
+    for output_directory in output_directories:
+        output_bin_path = os.path.join(output_directory, f"Map_m{lvl}.bin")
 
-    image = Image.open(image_path)
-    pixels = image.load()
+        image = Image.open(image_path)
+        pixels = image.load()
 
-    with open("special_tiles.json", "r") as f:
-        special_cases = json.load(f)
+        with open("special_tiles.json", "r") as f:
+            special_cases = json.load(f)
 
-    width, height = image.size
-    if width != 100 or height != 100:
-        raise ValueError(color_settings("Image size must be 100x100 pixels.", bcolors.FAIL))
+        width, height = image.size
+        if width != 100 or height != 100:
+            raise ValueError(color_settings("Image size must be 100x100 pixels.", bcolors.FAIL))
 
-    with open(output_bin_path, "wb") as f:
-        for y in range(100):
-            for x in range(100):
-                r, g, b = pixels[x, y]
+        with open(output_bin_path, "wb") as f:
+            for y in range(100):
+                for x in range(100):
+                    r, g, b = pixels[x, y]
 
-                hex_value = None
-                for key, tile in special_cases.items():
-                    if tile["color"] == [r, g, b]:
-                        hex_value = int(key, 16)
-                        break
+                    hex_value = None
+                    for key, tile in special_cases.items():
+                        if tile["color"] == [r, g, b]:
+                            hex_value = int(key, 16)
+                            break
 
-                if hex_value is None:
-                    raise ValueError(color_settings(
-                        f"No value found for color {r, g, b} at position ({x}, {y})", bcolors.FAIL))
+                    if hex_value is None:
+                        raise ValueError(color_settings(
+                            f"No value found for color {r, g, b} at position ({x}, {y})", bcolors.FAIL))
 
-                f.write(hex_value.to_bytes(3, 'big'))
+                    f.write(hex_value.to_bytes(3, 'big'))
 
-    print(color_settings(f"Generated .bin: {output_bin_path}", bcolors.OKGREEN))
+        print(color_settings(f"Generated .bin: {output_bin_path}", bcolors.OKGREEN))
 
 
 # Map generator (maze, road, voronoi)

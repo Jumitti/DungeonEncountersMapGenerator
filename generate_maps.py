@@ -11,11 +11,22 @@ from utils.bcolors import bcolors, color_settings
 
 
 def validate_seed(seed):
+    if not isinstance(seed, str):
+        raise TypeError("Seed must be a string.")
+
     if len(seed) != 10:
         raise ValueError("Seed must be exactly 10 characters long.")
-    if not all(c.isalnum() for c in seed):
-        raise ValueError("Seed must contain only alphanumeric characters (letters and digits).")
-    return seed.lower()
+    if not seed.isdigit():
+        raise ValueError("Seed must contain only numeric characters (digits).")
+    return seed
+
+
+def increment_seed(seed):
+    incremented_seed = str(int(seed) + 1).zfill(10)
+    if len(incremented_seed) > 10:
+        incremented_seed = "0000000000"
+        print("Incrementing the seed results in a value exceeding 10 digits.")
+    return incremented_seed
 
 
 debug_dir = "debug"
@@ -198,7 +209,7 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
             return None
 
 
-def save_floor_image(grid, output_image_path, output_image_path_720p=None, tempo_image_path_720p=None):
+def save_floor_image(grid, output_image_path, output_image_path_720p=None, saved_seed=None, saved_seed_720p=None):
     image = Image.new("RGB", (grid_size, grid_size), value_to_color[EMPTY])
     pixels = image.load()
 
@@ -208,8 +219,10 @@ def save_floor_image(grid, output_image_path, output_image_path_720p=None, tempo
 
     image.save(output_image_path)
     print(color_settings(f"Generated image: {output_image_path}", bcolors.OKGREEN))
+    if saved_seed is not None:
+        image.save(saved_seed)
 
-    if output_image_path_720p is not None and tempo_image_path_720p is not None:
+    if output_image_path_720p is not None:
         image_720p = Image.new("RGB", (700, 700), value_to_color[EMPTY])
         pixels_720p = image_720p.load()
 
@@ -223,8 +236,9 @@ def save_floor_image(grid, output_image_path, output_image_path_720p=None, tempo
                         pixels_720p[x * scale_factor + dx, y * scale_factor + dy] = color
 
         image_720p.save(output_image_path_720p)
-        image_720p.save(tempo_image_path_720p)
         print(color_settings(f"Generated 720x720 image: {output_image_path_720p}", bcolors.OKGREEN))
+        if saved_seed_720p is not None:
+            image_720p.save(saved_seed_720p)
 
 
 def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False, one_lvl=None, cheat_mode=False,
@@ -244,57 +258,71 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
     maps_data = []
 
     if seed is None:
-        seed = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        seed = ''.join(random.choices(string.digits, k=10))
     else:
         try:
             seed = validate_seed(seed)
-        except ValueError as e:
+        except Exception as e:
             print(color_settings(f"Invalid seed: {e}"), bcolors.FAIL)
             return
+
+    random.seed(seed)
+    used_seed = seed
 
     if one_lvl is not None:
         for lvl in tqdm(one_lvl, desc=color_settings(
                 f"Generating maps...", bcolors.OKGREEN) if type_progress == "tqdm" else f"Generating maps...",
                         colour="green"):
-            grid = generate_floor_data(lvl=lvl, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
-                                       seed=seed, cheat_mode=cheat_mode, debug=debug)
+            grid = generate_floor_data(lvl=lvl, maps_data=maps_data,
+                                       maze_type=maze_type if maze_type in ["maze", "road", "voronoi"] else
+                                       random.choice(["maze", "road", "voronoi"]), param_1=param_1,
+                                       seed=used_seed, cheat_mode=cheat_mode, debug=debug)
             maps_data.append({"level": lvl, "grid": grid})
+            used_seed = increment_seed(used_seed)
     else:
         for i in tqdm(range(nb_lvl), desc=color_settings(
                 f"Generating maps...", bcolors.OKGREEN) if type_progress == "tqdm" else f"Generating maps...",
                         colour="green"):
-            grid = generate_floor_data(lvl=i, maps_data=maps_data, maze_type=maze_type, param_1=param_1,
-                                       seed=seed, cheat_mode=cheat_mode, debug=debug)
+            grid = generate_floor_data(lvl=i, maps_data=maps_data,
+                                       maze_type=maze_type if maze_type in ["maze", "road", "voronoi"] else
+                                       random.choice(["maze", "road", "voronoi"]), param_1=param_1,
+                                       seed=used_seed, cheat_mode=cheat_mode, debug=debug)
             maps_data.append({"level": i, "grid": grid})
+            used_seed = increment_seed(used_seed)
 
     for data in tqdm(maps_data, desc=color_settings("Saving images and generating binaries", bcolors.WARNING),
                      colour="yellow"):
-
-        output_dir = f"output/{seed}"
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        output_dir_720p = f"output_720p/{seed}"
-        if not os.path.exists(output_dir_720p):
-            os.makedirs(output_dir_720p)
-
-        tempo_dir = f"tempo"
-        if not os.path.exists(tempo_dir):
-            os.makedirs(tempo_dir)
-
         lvl = data["level"]
         grid = data["grid"]
-        output_image_path = os.path.join(output_dir, f"Map_m{lvl}.png")
-        output_image_path_720p = os.path.join(output_dir_720p, f"Map_m{lvl}_720p.png")
-        tempo_image_path_720p = os.path.join(tempo_dir, f"Map_m{lvl}_720p.png")
-        save_floor_image(grid, output_image_path, output_image_path_720p, tempo_image_path_720p)
+
+        tempo_dir, tempo_dir_720p = f"tempo/{maze_type}_{seed}/100p", f"tempo/{maze_type}_{seed}/720p"
+        if not os.path.exists(tempo_dir):
+            os.makedirs(tempo_dir)
+        if not os.path.exists(tempo_dir_720p):
+            os.makedirs(tempo_dir_720p)
+
+        if nb_lvl == 1 and one_lvl is None:
+            saved_seed = f"saved_seed/{maze_type}_{seed}/100p"
+            saved_seed_720p = f"saved_seed/{maze_type}_{seed}/720p"
+            if not os.path.exists(saved_seed):
+                os.makedirs(saved_seed)
+            if not os.path.exists(saved_seed_720p):
+                os.makedirs(saved_seed_720p)
+            saved_seed_IP = os.path.join(saved_seed, f"Map_m{lvl}.png")
+            saved_seed_IP_720p = os.path.join(saved_seed_720p, f"Map_m{lvl}_720p.png")
+        else:
+            saved_seed_IP, saved_seed_IP_720p = None, None
+
+        output_image_path = os.path.join(tempo_dir, f"Map_m{lvl}.png")
+        output_image_path_720p = os.path.join(tempo_dir_720p, f"Map_m{lvl}_720p.png")
+        save_floor_image(grid, output_image_path, output_image_path_720p, saved_seed_IP, saved_seed_IP_720p)
 
         if generate_bin is True:
-            DE.reconstruct_bin(lvl=lvl, image_path=output_image_path, output_directory=output_dir)
-            print(color_settings(f"Binary and image files for level {lvl} saved in: {output_dir}", bcolors.OKGREEN))
+            DE.reconstruct_bin(lvl=lvl, image_path=output_image_path, output_directories=[tempo_dir, saved_seed])
+            print(color_settings(f"Binary and image files for level {lvl} saved in: {tempo_dir}", bcolors.OKGREEN))
 
     return seed
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="maze", seed="Dmx1SohLRx", generate_bin=True, one_lvl=[0], cheat_mode=False, debug=True)
+    run(nb_lvl=100, maze_type="shuffle", seed="0000000000", generate_bin=False, one_lvl=[0, 1, 2], cheat_mode=False, debug=False)

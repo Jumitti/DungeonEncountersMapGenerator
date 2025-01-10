@@ -91,7 +91,7 @@ def generate_maze(grid, start_x, start_y, max_depth=50, seed=None,
 
 
 # Road
-def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100, seed=None,
+def generate_road(grid, start_x, start_y, route_width=15, grid_size=100, seed=None,
                   PATH=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                              tile["name"] == "PATH"), None),
                   EMPTY=next((int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
@@ -103,9 +103,8 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100, s
 
     random.seed(seed)
 
-    grid[start_x][start_y] = PATH
     frontier = neighbors(start_x, start_y)
-    random.shuffle(frontier)  # Utiliser la seed pour les résultats reproductibles
+    random.shuffle(frontier)
 
     while frontier:
         nx, ny = frontier.pop()
@@ -119,7 +118,7 @@ def generate_road(grid, start_x=50, start_y=50, route_width=15, grid_size=100, s
             for neighbor in neighbors(nx, ny):
                 if grid[neighbor[0]][neighbor[1]] == EMPTY:
                     frontier.append(neighbor)
-            random.shuffle(frontier)  # Utiliser la seed pour les résultats reproductibles
+            random.shuffle(frontier)
 
     print(color_settings(f"Maze (type: road) generated.", bcolors.OKGREEN))
 

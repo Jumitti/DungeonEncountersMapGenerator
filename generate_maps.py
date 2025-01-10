@@ -201,10 +201,14 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
 
     if iteration >= max_iterations:
         print(color_settings("Max iterations reached. Attempting final connection...", bcolors.WARNING))
-        DE.connect_disconnected_groups(grid, nb_groups=1)
+        while DE.is_connected(grid, start_x, start_y, iteration) is False:
+            DE.connect_disconnected_groups(grid, nb_groups=1)
+        DE.refine_map(grid)
         if DE.is_connected(grid, start_x, start_y, iteration):
             return grid
         else:
+            if debug:
+                save_floor_image(grid, f"debug/Map_m{lvl}_{iteration}_rf.png")
             print(color_settings("Final connection failed. Map generation aborted.", bcolors.FAIL))
             return None
 
@@ -327,4 +331,4 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="shuffle", seed="0000000000", generate_bin=False, one_lvl=[0, 1, 2], cheat_mode=False, debug=False)
+    run(nb_lvl=100, maze_type="voronoi", seed="0000000008", generate_bin=False, one_lvl=None, cheat_mode=False, debug=True)

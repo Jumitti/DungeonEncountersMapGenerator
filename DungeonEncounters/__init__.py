@@ -537,6 +537,10 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                             break
                         if placed:
                             break
+                    if placed:
+                        break
+            if placed:
+                break
 
     if not placed:
         for downstairs_key, downstairs_data in special_tiles.items():
@@ -559,6 +563,8 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                         break
                     if placed:
                         break
+                if placed:
+                    break
 
 
 # Place ASCENDING

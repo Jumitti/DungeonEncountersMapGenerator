@@ -123,9 +123,9 @@ def generate_floor_data(lvl, maps_data=None, maze_type="voronoi", param_1=None, 
 
     DE.place_wanderers(grid, lvl, wanderers)
 
-    DE.place_descending(grid, start_x, start_y, lvl, special_tiles)
-
     DE.place_riddles(grid, lvl, special_tiles)
+
+    DE.place_descending(grid, start_x, start_y, lvl, special_tiles)
 
     DE.place_riddles_hints(grid, lvl, special_tiles)
 
@@ -331,4 +331,4 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="voronoi", seed="0000000008", generate_bin=False, one_lvl=None, cheat_mode=False, debug=True)
+    run(nb_lvl=100, maze_type="maze", seed="0000000019", generate_bin=False, one_lvl=None, cheat_mode=False, debug=True)

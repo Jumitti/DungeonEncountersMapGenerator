@@ -331,4 +331,4 @@ def run(nb_lvl, maze_type="voronoi", param_1=None, seed=None, generate_bin=False
 
 
 if __name__ == "__main__":
-    run(nb_lvl=100, maze_type="maze", seed="0000000019", generate_bin=False, one_lvl=None, cheat_mode=False, debug=True)
+    run(nb_lvl=100, maze_type="maze", seed="0000000028", generate_bin=False, one_lvl=None, cheat_mode=True, debug=True)

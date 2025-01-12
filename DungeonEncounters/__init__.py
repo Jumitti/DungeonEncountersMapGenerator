@@ -520,14 +520,13 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
             coords = downstairs_data["coord"]
             for coord in coords:
                 if lvl == coord[0]:
-                    if farthest_positions:
-                        cx, cy = farthest_positions[0]
+                    for farthest_position in farthest_positions:
+                        cx, cy = farthest_position
                         dx, dy = random.randint(-4, 4), random.randint(-4, 4)
                         nx, ny = cx + dx, cy + dy
 
                         nx = max(0, min(nx, grid_size - 1))
                         ny = max(0, min(ny, grid_size - 1))
-
                         if 0 <= nx < grid_size and 0 <= ny < grid_size and grid[nx][ny] in {EMPTY, PATH, HIDDEN}:
                             complete_path(grid, nx, ny, "RANDOM")
                             grid[nx][ny] = next(
@@ -542,8 +541,8 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
     if not placed:
         for downstairs_key, downstairs_data in special_tiles.items():
             if downstairs_data["name"] == "01":
-                if farthest_positions:
-                    cx, cy = farthest_positions[0]
+                for farthest_position in farthest_positions:
+                    cx, cy = farthest_position
                     dx, dy = random.randint(-4, 4), random.randint(-4, 4)
                     nx, ny = cx + dx, cy + dy
 
@@ -556,6 +555,9 @@ def place_descending(grid, start_x, start_y, lvl, special_tiles,
                             (int(key, 16) for key, tile in json.load(open("special_tiles.json")).items() if
                              key == downstairs_key), None)
                         print(color_settings(f"01 Downstairs: z={lvl}, x={nx}, y={ny}", bcolors.OKBLUE))
+                        placed = True
+                        break
+                    if placed:
                         break
 
 
